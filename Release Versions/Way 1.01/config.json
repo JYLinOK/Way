@@ -1,0 +1,8 @@
+{
+    "html_ways_path": "./htmlways",
+    "html_edit_path": "./htmledit",
+    "html_build_path": "./htmlbuild",
+    "home_index_html": "./htmlbuild/ydook.html",
+    "auto_generate_seed": 1,
+    "auto_scaner_seed": 2
+}
