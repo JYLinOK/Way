@@ -1,2 +1,1 @@
-# Way
-Way, a simple fast pure web pages coding design framework.
+# Way - An easy and fast front-end generator library
