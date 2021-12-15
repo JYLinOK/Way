@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Way - About</title>
+</head>
+
+<body>
+   <div class="HeadLine">
+    <div class="ToolBtn" onclick="Btn4()">Home</div>
+    <div class="ToolBtn" onclick="Btn2()">About</div>
+    <div class="ToolBtn" onclick="Btn6()">Tutorial</div>
+    <div class="ToolBtn" onclick="Btn7()">Documents</div>
+    <div class="ToolBtn" onclick="Btn5()">Way Github</div>
+    <div class="ToolBtn" onclick="Btn1()">Jinwei CSDN</div>
+    <div class="ToolBtn" onclick="Btn3()">YDOOK</div>
+</div>
+    <div class="MainBox">
+        <div class="ZoomContent">
+            <br />
+            <br />
+            <div class="BigTitle">Way.Py &nbsp;1.03</div>
+            <br />
+            <br />
+            <br />
+            <div class="Slogan">Way - An easy and fast front-end generator library</div>
+            <br />  
+            <br />  
+            <br />  
+            <b><div style="font-size: 38px;" class="TextCenter">About Page</div></b>
+<br/>
+<h3 class="TextCenter">Contribution Honor List</h3>
+<table border="1" class="TextCenter">
+    <tr>
+    <td>Version</td>
+    <td>Updated Time</td>
+    <td>Contributor</td>
+    </tr>
+    <tr>
+        <td>Way 1.01</td>
+        <td>December, 08, 2021</td>
+        <td>Jinwei Lin</td>
+        </tr>
+        <tr>
+            <td>Way 1.02</td>
+            <td>December, 12, 2021</td>
+            <td>Jinwei Lin</td>
+            </tr>
+</table>
+            <br /> 
+            <br /> 
+            <br /> 
+            <br /> 
+            <br /> 
+            <br /> 
+        </div>
+    </div>
+
+
+</body>
+
+<script>
+    function Btn1() {
+        // window.open("https://ydook.blog.csdn.net/");
+        var curWwwPath = window.document.location.href;
+        console.log(curWwwPath);
+    }
+    function Btn2() {
+        window.location.href = "./about.html";
+    }
+    function Btn3() {
+        window.open("http://www.ydook.com/");
+    }
+    function Btn4() {
+        window.location.href = "./ydook.html";
+    }
+    function Btn5() {
+        window.open("https://github.com/JYLinOK/Way");
+    }
+    function Btn6() {
+        window.location.href = "./tutorials/t1.html";
+    }
+    function Btn7() {
+        window.location.href = "./documents/doc1.html";
+    }
+</script>
+
+
+<style>
+    body {
+        background: rgb(255, 255, 255);
+        margin: 0;
+        padding: 0;
+    }
+
+    .HeadLine {
+        position: fixed;
+        background: rgb(31, 131, 156);
+        height: 38px;
+        width: 100%;
+        z-index: 10;
+    }
+
+    .BigTitle {
+        font-size: 66px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 666;
+        margin-left: 2%;
+        color: rgb(0, 82, 71);
+    }
+
+    .Slogan {
+        margin-left: 10%;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 36px;
+        color: rgb(0, 128, 160);
+    }
+</style>
+
+<style>
+    .MainBox {
+        position: absolute;
+        background: rgb(229, 240, 220);
+        min-height: 100%;
+        width: 100%;
+        margin-top: 38px;
+        text-align: center;
+    }
+
+    .ZoomContent {
+        margin: 0 auto;
+        background: rgb(255, 255, 255);
+        min-height: 500px;
+        /* width: 66%; */
+        width: 1000px;
+        margin-top: 30px;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .ToolBtn {
+        float: left;
+        margin-left: 16px;
+        height: 100%;
+        min-width: 96px;
+        padding-left: 2px;
+        padding-right: 2px;
+        background: lightseagreen;
+        font-size: 18px;
+        text-align: center;
+        line-height: 38px;
+        color: white;
+        overflow: hidden;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .ToolBtn:hover {
+        background: rgb(2, 218, 207);
+    }
+
+
+    .TextCenter{
+        margin-left: 10%;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+
+</html>
