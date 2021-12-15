@@ -1,3 +1,12 @@
 # Way - An easy and fast front-end generator library
+***
 
-![image](https://github.com/JYLinOK/Way/blob/main/Way1.05/htmledit/pictures/jpg/Way.jpg)
+
+
+
+
+
+***
+![image](https://github.com/JYLinOK/Way/blob/main/Way1.05/htmledit/pictures/png/Way.png)
+
+
