@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import time
 import shutil
@@ -40,6 +41,9 @@ tag_name_list = os.listdir(html_way_path)
 # Get welcome context
 way_router_path = config_f_read_json['way_router_path']
 
+# Get auto restart
+auto_restart = config_f_read_json['way_router_path']
+
 # Get way_announce
 way_announce = config_f_read_json['way_announce']
 way_announce_str = "<script>console.log('\\\A/ Hi, Way! - An easy and fast front-end generator library.');</script>"
@@ -53,7 +57,16 @@ if welcome_context:
         print(welcome_f.read())
     # print time
     print('______________________________________________________________________________')
-    print('>> Run Time:', time.strftime( "%a %b,%d %H:%M:%S %Y", time.localtime()), '\n')
+    print('>> Way: Run Time:', time.strftime( "%a %b,%d %H:%M:%S %Y", time.localtime()), '\n')
+
+# ============================================================================================================
+# ============================================================================================================
+# Auto-restart 
+def auto_restart():
+    if auto_restart:
+        print('Way: Restarting...')
+        sys.exit(0)
+        os.system('python Way.py')
 
 
 # Get above father dir
@@ -159,6 +172,7 @@ def write_files(file_path, file_str):
             fw.write(file_str)
     except IOError:
         print('IOError: write_files error!')
+        auto_restart()
         pass
     else:
         pass
@@ -172,6 +186,7 @@ def read_files(file_path):
             return fr_read
     except IOError:
         print('IOError: read_files() error!')
+        auto_restart()
         pass
     else:
         pass
@@ -258,6 +273,7 @@ def get_way_tags_set(html_path):
 
     except IOError:
         print('IOError: get_way_tags_set() error!')
+        auto_restart()
         pass
     else:
         pass
@@ -537,13 +553,13 @@ def delete_extra_files():
             try:
                 os.remove(f_built_file)
             except IOError:
-                # print('IOError: in delete_extra_files()!')
+                print('IOError: in delete_extra_files()!')
+                auto_restart()
                 pass
             else:
                 pass
                 # print('Success!')
         
-
     # delete excess dirs
     for f_built_dir in all_build_path_item[0]:
         f_built_2_edit = html_edit_path + f_built_dir[len_build:]
@@ -555,7 +571,8 @@ def delete_extra_files():
             try:
                 shutil.rmtree(f_built_dir)
             except IOError:
-                # print('IOError: in delete_extra_files()!')
+                auto_restart()
+                print('IOError: in delete_extra_files()!')
                 pass
             else:
                 pass
@@ -621,10 +638,10 @@ def way_html():
 # a = auto_change_link(inside_path, change_path)
 # print('a = \n', a)
 
-
+# auto_restart()
 
 # =============================================================================
-
+# =============================================================================
 
 
 # Way monitor for file individual update
@@ -636,6 +653,7 @@ def way_monitor_file_path(pipe):
             time.sleep(auto_scaner_seed)
         except IOError:
             print('IOError: way_monitor_file_path error!')
+            auto_restart()
             pass
         else:
             pass
@@ -661,6 +679,7 @@ def way_monitor_file_way(pipe):
             time.sleep(auto_generate_seed)
     except IOError:
         print('IOError: way_monitor_file_way error!')
+        auto_restart()
         pass
     else:
         pass

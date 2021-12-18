@@ -1,4 +1,5 @@
 {
+    "auto_restart": true,
     "way_announce": true,
     "welcome_context": true,
     "html_way_path": "./htmlway",
