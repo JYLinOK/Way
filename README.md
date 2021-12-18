@@ -1,15 +1,13 @@
-# Way1.03 - An easy and fast front-end generator library
+# Way1.04 - An easy and fast front-end generator library
 ***
 
 
 ## Updation Note: 
 
-1. Added and tested the Way Auto-Router function.
-2. Changed the name of dir htmlways to htmlway.
-3. Added the auto-updation for deep-dir in both htmledit and htmlway.
-4. Added a new module of wayroad to save way router files.
-5. Renew the definition of config.json.
+1. Added and tested the auto-updation for the Way Auto-Router module.
+2. Update the model website strcute
+3. Tested the implements of appling the pictures, including the follow formats of: .ico, .png and .gif. 
 
 
-Dec, 13, 2021
+Dec, 14, 2021
 (By Jinwei Lin:)
