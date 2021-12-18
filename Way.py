@@ -1,20 +1,22 @@
 import os
 import json
 import time
+import shutil
 import hashlib
 import webbrowser
 import multiprocessing
+
+print('____________________________________________________________________________')
+print(' Way.py: founded by Jinwei Lin: a easy and fast front-end generator library.')
+print('____________________________________________________________________________')
 
 # Load the config
 with open('./config.json', 'r',  encoding='UTF-8') as config_f:
     config_f_read = config_f.read()
     config_f_read_json = json.loads(config_f_read)
 
-
-print()
-
-# Set html ways path
-html_ways_path = config_f_read_json['html_ways_path']
+# Set html way path
+html_way_path = config_f_read_json['html_way_path']
 
 # Set html origin path
 html_edit_path = config_f_read_json['html_edit_path']
@@ -26,11 +28,25 @@ html_build_path = config_f_read_json['html_build_path']
 auto_generate_seed = config_f_read_json['auto_generate_seed']
 auto_scaner_seed = config_f_read_json['auto_scaner_seed']
 
+# Get the browser path
+browser_exe_path = config_f_read_json['browser_exe_path']
+
 # Get tag name list
 home_index_html = os.getcwd() + '/' + config_f_read_json['home_index_html']
 
 # Get tag name list
-tag_name_list = os.listdir(html_ways_path)
+tag_name_list = os.listdir(html_way_path)
+
+# Get welcome context
+welcome_path = config_f_read_json['welcome_path']
+welcome_context = config_f_read_json['welcome_context']
+
+if welcome_context:
+    with open(welcome_path, 'r',  encoding='UTF-8') as welcome_f:
+        print(welcome_f.read())
+    # print time
+    print('______________________________________________________________________________\n')
+    print('>> Run Time:', time.strftime( "%a %b,%d %H:%M:%S %Y", time.localtime()))
 
 
 # Get above father dir
@@ -47,12 +63,10 @@ def get_all_items(now_dir, dir_set, file_set):
         for item_name in now_item_list:
             if if_files(item_name)[0]:
                 file_set.append(now_dir + '/' + item_name)
-                # print('file_set = ', file_set)
 
             elif not if_files(item_name)[0]:
                 new_dir = now_dir + '/' + item_name
                 dir_set.append(new_dir)
-                # print('dir_set = ', dir_set)
                 get_all_items(new_dir, dir_set, file_set)
 
     return [dir_set, file_set]
@@ -61,23 +75,11 @@ def get_all_items(now_dir, dir_set, file_set):
 
 # Get now lists
 def get_now_lists():
-    # Get files and paths lists
-    # all_edit_path_item = os.listdir(html_edit_path)
-    # all_way_path_item = os.listdir(html_ways_path)
-
-    # print('html_edit_path = ', html_edit_path)
-    # print()
-    # print('html_ways_path = ', html_ways_path)
-
-
+    # Get files and paths lists between editing and building
     all_edit_path_item = get_all_items(html_edit_path, [], [])
-    all_way_path_item = get_all_items(html_ways_path, [], [])
+    all_way_path_item = get_all_items(html_way_path, [], [])
 
-    # print('all_edit_path_item = ', all_edit_path_item)
-    # print()
-    # print('all_way_path_item = ', all_way_path_item)
-
-    # initialize
+    # initialize lists
     now_html_list = []
     now_way_list = []
 
@@ -98,10 +100,9 @@ def get_now_lists():
 def if_files(item_name):
     if '.' in item_name:
         point_index = item_name.index('.')
-        # print(point_index)
         f_extension = item_name[point_index+1:]
+
         if f_extension != '':
-            # print(f_extension)
             return [True, f_extension]
     else:
         return [False, None]
@@ -119,40 +120,55 @@ def now_update_scander(a_dir, edit_path):
     # Get files or directories list
     now_dir_scanning = a_dir
     files_list = os.listdir(now_dir_scanning)
-    # print('files_list = ', files_list)
 
     # Scaner the files or directories
     if files_list != []:
         for item_name in files_list:
-            if not if_files(item_name)[0]:
-                now_dir_scanning = a_dir + '/' + item_name
-                create_path = html_build_path + now_dir_scanning[len(edit_path):]
+            now_dir_scanning = a_dir + '/' + item_name
+            # print('now_dir_scanning = ', now_dir_scanning)
 
-                if not os.path.exists(create_path):
-                    os.makedirs(create_path)
+            if not if_files(item_name)[0]:
+                build_dir_path = html_build_path + now_dir_scanning[len(edit_path):]
+
+                if not os.path.exists(build_dir_path):
+                    os.makedirs(build_dir_path)
+                
+                # update iteration
                 now_update_scander(now_dir_scanning, edit_path)
+
 
             # if item_name is a file name
             elif not item_name.endswith('.html'):
-                now_dir_scanning = a_dir + '/' + item_name
-                create_path = html_build_path + now_dir_scanning[len(edit_path):]
+                build_file_path = html_build_path + now_dir_scanning[len(edit_path):]
 
-                if not os.path.exists(create_path):
-                    copy_file(now_dir_scanning, create_path)
+                if not os.path.exists(build_file_path):
+                    copy_file(now_dir_scanning, build_file_path)
 
 
 # Write file
 def write_files(file_path, file_str):
-    with open(file_path, 'w', encoding='UTF-8') as fw:
-        fw.write(file_str)
-
+    try:
+        with open(file_path, 'w', encoding='UTF-8') as fw:
+            fw.write(file_str)
+    except IOError:
+        print('IOError: write_files error!')
+        pass
+    else:
+        pass
+        # print('Success!')
 
 # Read file
 def read_files(file_path):
-    with open(file_path, 'r', encoding='UTF-8') as fr:
-        fr_read = fr.read()
-        return fr_read
-
+    try:
+        with open(file_path, 'r', encoding='UTF-8') as fr:
+            fr_read = fr.read()
+            return fr_read
+    except IOError:
+        print('IOError: read_files error!')
+        pass
+    else:
+        pass
+        # print('Success!')
 
 # Get id context
 def get_id_context(tag):
@@ -165,8 +181,8 @@ def get_id_context(tag):
         closed_index = other_context.index('"')
 
         id_context = tag[id_index + 4:id_index + 4 + closed_index]
-        # print("id = ", id_context)
         return id_context
+
     else:
         return None
 
@@ -175,55 +191,53 @@ def get_id_context(tag):
 def get_way_tags_set(html_name):
     way_tags_set = []
     # with open(html_edit_path + '/' + html_name, 'r+', encoding='UTF-8') as fr:
-    with open(html_name, 'r', encoding='UTF-8') as fr:
-        # Get the file content
-        f_read = fr.read()
-        # Define the index
-        index = 0
-        start_index = 0
-        new_tag = False
+    try:
+        with open(html_name, 'r', encoding='UTF-8') as fr:
+            # Get the file content
+            f_read = fr.read()
+            # Define the index
+            index = 0
+            start_index = 0
+            new_tag = False
 
-        for char_i in f_read:
-            if not new_tag:
-                if char_i == '<':
-                    new_tag = True
-                    start_index = index
-            if new_tag:
-                if char_i == '>':
-                    new_tag = False
-                    end_index = index
-                    # get tage segment
-                    tag = f_read[start_index: end_index + 1]
-                    # print('tag = ', tag)
+            for char_i in f_read:
+                if not new_tag:
+                    if char_i == '<':
+                        new_tag = True
+                        start_index = index
+                if new_tag:
+                    if char_i == '>':
+                        new_tag = False
+                        end_index = index
+                        # get tage segment
+                        tag = f_read[start_index: end_index + 1]
+                        # print('tag = ', tag)
 
-                    # Handel the way tags
-                    if tag[0:5] == '<way ':
-                        # print('way tag = ', tag)
-                        # print('way start_index = ', start_index)
-                        # print('way end_index = ', end_index)
+                        # Handel the way tags
+                        if tag[0:5] == '<way ':
+                            id_context = get_id_context(tag)
+                            if id_context:
+                                way_tags_set.append([id_context, start_index, end_index + 7])
+                                # print()
+                index += 1
+            return way_tags_set
 
-                        id_context = get_id_context(tag)
-                        if id_context:
-                            way_tags_set.append(
-                                [id_context, start_index, end_index + 7])
-                            # print()
-
-            index += 1
-    # print('____________________________________')
-    # print('way_tags_set = ', way_tags_set)
-    return way_tags_set
+    except IOError:
+        print('IOError: get_way_tags_set error!')
+        pass
+    else:
+        pass
+        # print('Success!')
 
 
 def get_html_segments(html_name, way_tag_set):
     # Update to new html in html build
-    # f_read = read_files(html_edit_path + '/' + html_name)
     f_read = read_files(html_name)
     html_segments = []
     way_tag_end_index = 0
     sum_way_tag_index = 0
     way_tag_set_len = len(way_tag_set)
 
-    # print('way_tag_set = ', way_tag_set)
 
     if way_tag_set_len > 0:
         for way_tag in way_tag_set:
@@ -234,23 +248,13 @@ def get_html_segments(html_name, way_tag_set):
                 elif way_tag[1] > 0:
                     seg_origin = f_read[way_tag_end_index:way_tag[1]]
 
-                seg_way = read_files(
-                    html_ways_path + '/' + way_tag[0] + '.html')
+                seg_way = read_files(html_way_path + '/' + way_tag[0] + '.html')
                 way_tag_end_index = way_tag[2]
 
                 html_segments.append(seg_origin)
                 html_segments.append(seg_way)
 
         html_segments.append(f_read[way_tag_end_index + 1:])
-
-    # print('way_segments = \n', way_segments)
-    # print('len(way_segments) = ', len(way_segments))
-    # p = 0
-    # for item in way_segments:
-    #     print('\n-------------------------------------------------------------'
-    #           '--------------------------------\n No. ', p, 'segment : \n', item)
-    #     p += 1
-
     return html_segments
 
 
@@ -262,53 +266,120 @@ def get_list_str_in_all(list_name):
     return all_str
 
 
+# Delete the extra files in building folder
+def delete_extra_files():
+    # Get files and paths lists between editing and building
+    all_edit_path_item = get_all_items(html_edit_path, [], [])
+    all_build_path_item = get_all_items(html_build_path, [], [])
+
+    # print('all_edit_path_item = ', all_edit_path_item)
+    # print()
+    # print('all_build_path_item = ', all_build_path_item)
+    # print()
+
+    len_build = len(html_build_path)
+
+    # delete excess files
+    for f_built_file in all_build_path_item[1]:
+        f_built_2_edit = html_edit_path + f_built_file[len_build:]
+
+        if f_built_2_edit not in all_edit_path_item[1]:
+            # print('file ========>', f_built_2_edit, ' not in all_edit_path_item\n')
+            try:
+                os.remove(f_built_file)
+            except IOError:
+                # print('IOError: in delete_extra_files()!')
+                pass
+            else:
+                pass
+                # print('Success!')
+        
+
+    # delete excess dirs
+    for f_built_dir in all_build_path_item[0]:
+        f_built_2_edit = html_edit_path + f_built_dir[len_build:]
+        # print('f_built_2_edit = ', f_built_2_edit)
+
+        if f_built_2_edit not in all_edit_path_item[0]:
+            # print('dir ========>', f_built_2_edit, ' not in all_edit_path_item\n')
+
+            try:
+                shutil.rmtree(f_built_dir)
+            except IOError:
+                # print('IOError: in delete_extra_files()!')
+                pass
+            else:
+                pass
+                # print('Success!')
+
+    # print()
+
+            
 # Define way to handle html file
 def way_html():
     now_html_list = get_now_lists()[0]
-    # print('way_html now_html_list = ', now_html_list)
     edit_path_len = len(html_edit_path)
 
     for html_name in now_html_list:
-        html_name_to_build = html_build_path + html_name[edit_path_len:]
-        # print('html_name = ', html_name)
-        # print('html_name_to_build = ', html_name_to_build)
 
-        # print('-----------------------------------------')
+        html_name_to_build = html_build_path + html_name[edit_path_len:]
+
         way_tag_set = get_way_tags_set(html_name)
-        # print('way_tag_set = ', way_tag_set)
 
         html_segments = get_html_segments(html_name, way_tag_set)
-        # print('html_segments = ', html_segments)
-        # write_files(html_build_path + '/' + html_name,
+
         write_files(html_name_to_build, get_list_str_in_all(html_segments))
 
 
 # Static Test :
-# now_update_scander(html_edit_path, html_edit_path)
+
 # way_html()
+# now_update_scander(html_edit_path, html_edit_path)
+
+# delete_extra_files()
+
 
 
 # Way monitor for file individual update
 def way_monitor_file_path(pipe):
     while True:
-        now_update_scander(html_edit_path, html_edit_path)
-        # html_way_list = get_now_lists()
-        # pipe.send(html_way_list)
-        # print('A>> = ', html_way_list)
-        # print()
-        time.sleep(auto_scaner_seed)
-
+        try:
+            now_update_scander(html_edit_path, html_edit_path)
+            delete_extra_files()
+            time.sleep(auto_scaner_seed)
+        except IOError:
+            print('IOError: way_monitor_file_path error!')
+            pass
+        else:
+            pass
+            # print('Success!')
+       
 
 # Way monitor for file content update
 def way_monitor_file_way(pipe):
     # Use JSON to finish
-    # print('instant_edit_mode')
     index_url = home_index_html
-    webbrowser.open(index_url, new=0, autoraise=False)
-    while True:
-        way_html()
-        # print('B>>...', pipe.recv(), '\n')
-        time.sleep(auto_generate_seed)
+    browser_path = browser_exe_path
+
+    try:
+        if os.path.exists(browser_path):
+            webbrowser.register('browser', None, webbrowser.BackgroundBrowser(browser_path))
+            browser = webbrowser.get('browser')
+            browser.open(index_url, new=0, autoraise=True)
+        else:
+            webbrowser.open(index_url, new=0, autoraise=True)
+
+        while True:
+            way_html()
+            time.sleep(auto_generate_seed)
+    except IOError:
+        print('IOError: way_monitor_file_way error!')
+        pass
+    else:
+        pass
+        # print('Success!')
+
+   
 
 
 # Main RUN WAY
@@ -322,5 +393,9 @@ if __name__ == "__main__":
     p_file_path.start()
     p_file_way.start()
 
+
     
+
+
+
 
