@@ -3,10 +3,3 @@
 
 
 
-
-
-
-***
-![image](https://github.com/JYLinOK/Way/blob/main/Way1.05/htmledit/pictures/png/Way.png)
-
-
