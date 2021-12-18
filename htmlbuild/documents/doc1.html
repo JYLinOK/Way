@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <title>Way - Documents</title>
+    <link rel="icon" href="../pictures/icon/way.ico" />
+
 </head>
 
 <body>
@@ -20,7 +22,12 @@
         <div class="ZoomContent">
             <br />
             <br />
-            <div class="BigTitle">Way.Py &nbsp;1.03</div>
+            <br />
+            <div class="IconBox">
+                <img class="IconPic" style="background: white;" src="../pictures/png/Y.png" />
+            </div>
+            <br />
+            <div class="BigTitle">Way.Py &nbsp;1.04</div>
             <br />
             <br /> 
             <br /> 
@@ -58,7 +65,7 @@
         window.location.href = "../about.html";
     }
     function Btn3() {
-        window.open("http://www.ydook.com/");
+        window.open("http://www.ydook.com");
     }
     function Btn4() {
         window.location.href = "../ydook.html";
@@ -70,10 +77,13 @@
         window.location.href = "../tutorials/t1.html";
     }
     function Btn7() {
-        window.location.href = "./doc1.html";
+        window.location.href = "../documents/doc1.html";
     }
 </script>
 
+<script>
+    console.log('Way - An easy and fast front-end generator library');
+</script>
 <style>
     body {
         background: rgb(255, 255, 255);
@@ -102,6 +112,30 @@
         font-family: Arial, Helvetica, sans-serif;
         font-size: 36px;
         color: rgb(0, 128, 160);
+    }
+
+
+    .IconBox {
+        width: 100%;
+        background: rgb(255, 255, 255);
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .IconPic {
+        width: 36%;
+        background: black;
+        margin: 0 auto;
+        animation: moveway 1s;
+    }
+
+    @keyframes moveway {
+        0% {
+            transform:rotateY(0deg);
+        }
+        100% {
+            transform:rotateY(180deg);
+        }
     }
 </style>
 

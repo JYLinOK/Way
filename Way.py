@@ -6,9 +6,9 @@ import hashlib
 import webbrowser
 import multiprocessing
 
-print('____________________________________________________________________________')
-print(' Way.py: founded by Jinwei Lin: a easy and fast front-end generator library.')
-print('____________________________________________________________________________')
+print('_____________________________________________________________________________')
+print(' Way.py: founded by Jinwei Lin: an easy and fast front-end generator library.')
+print('_____________________________________________________________________________')
 
 # Load the config
 with open('./config.json', 'r',  encoding='UTF-8') as config_f:
@@ -38,7 +38,7 @@ home_index_html = os.getcwd() + '/' + config_f_read_json['home_index_html']
 tag_name_list = os.listdir(html_way_path)
 
 # Get welcome context
-way_road_path = config_f_read_json['way_road_path']
+way_router_path = config_f_read_json['way_router_path']
 
 
 # Get welcome context
@@ -190,14 +190,31 @@ def get_id_context(tag):
 
     else:
         return None
+    
+
+# Get id context
+def get_wr_context(tag):
+    if 'wr=' in tag:
+        # Get the index of 'wr= '
+        wr_index = tag.index('wr="')
+        # Get the text of other part
+        other_context = tag[wr_index + 4:]
+        # Get the wr of closed index
+        closed_index = other_context.index('"')
+
+        wr_context = tag[wr_index + 4:wr_index + 4 + closed_index]
+        return wr_context
+
+    else:
+        return None
 
 
 # Get way tags set
-def get_way_tags_set(html_name):
+def get_way_tags_set(html_path):
     way_tags_set = []
-    # with open(html_edit_path + '/' + html_name, 'r+', encoding='UTF-8') as fr:
+    # with open(html_edit_path + '/' + html_path, 'r+', encoding='UTF-8') as fr:
     try:
-        with open(html_name, 'r', encoding='UTF-8') as fr:
+        with open(html_path, 'r', encoding='UTF-8') as fr:
             # Get the file content
             f_read = fr.read()
             # Define the index
@@ -220,10 +237,19 @@ def get_way_tags_set(html_name):
 
                         # Handel the way tags
                         if tag[0:5] == '<way ':
+                            # test whether have a id
                             id_context = get_id_context(tag)
                             if id_context:
-                                way_tags_set.append([id_context, start_index, end_index + 7])
+                                way_tags_set.append([id_context, start_index, end_index + 7, 'id'])
                                 # print()
+
+                            # if the way-tag is a wayrouter tag
+                            else:
+                                wr_context = get_wr_context(tag)
+                                if wr_context:
+                                    way_tags_set.append([wr_context, start_index, end_index + 7, 'wr'])
+                                    # print('\nwr_context way_tags_set = ', wr_context)
+
                 index += 1
             return way_tags_set
 
@@ -235,32 +261,185 @@ def get_way_tags_set(html_name):
         # print('Success!')
 
 
+# get sparated set of text
+def get_sparate_set(origin, start_sign, end_sign, item_index):
+    start_sign_len = len(start_sign)
+    end_sign_len = len(end_sign)
+    # print('start_sign[0] = ', start_sign[0])
+
+    start_index = 0
+    result_set = []
+
+    for char_i in origin:
+        if char_i == start_sign[0]:
+            s_sign = origin[start_index: start_index + 3]
+            # print('start_sign = ', start_sign)
+
+            if s_sign == start_sign:
+                rest_origin = origin[start_index+1:]
+                # print('rest_origin = ', rest_origin)
+
+                len_index = 0
+                for i_rest in rest_origin:
+                    # print(i_rest)
+
+                    if i_rest == end_sign:
+                        # print(i_rest)
+
+                        sparated = origin[start_index+1:start_index+len_index+1]
+                        # print('sparated = ', sparated, '\n')
+
+                        rest_origin = origin[start_index+len_index+2:]
+                        # print('rest_origin = ', rest_origin, '\n')
+                        
+                        item_index += 1
+                        # print('item_index = ', item_index, '\n')
+                        result_set.append([sparated, start_index+1, start_index+len_index+1, item_index-1]) 
+                        get_sparate_set(rest_origin, start_sign, end_sign, item_index-1)
+                        break
+
+                    len_index += 1
+
+        start_index += 1
+    return result_set
+
+
+# get the segments of text by known sparated segments list
+def sum_text_sparated (origin_text, sparated_list):
+    text_sparated_set = []
+
+    last_seg_index = 0 
+    for i_seg in sparated_list:
+        text_sparated_set.append(origin_text[last_seg_index:i_seg[1]])
+        text_sparated_set.append(i_seg[0])
+        last_seg_index = i_seg[2]
+
+    text_sparated_set.append(origin_text[sparated_list[-1][2]:])
+    # print('text_sparated_set = ', text_sparated_set)
+    return text_sparated_set
+
+
+# get the level of a path:
+def get_path_level(path):
+    # print('path = ', path)
+    level = 0
+
+    for i_char in path:
+        if i_char == '/':
+            level += 1
+    
+    return level
+
+ 
+# change the path to relative path automatically based on reference dir  
+def auto_change_link(inside_path, change_path):
+
+    inside_path_level = get_path_level(inside_path)
+    change_path_level = get_path_level(change_path)
+
+    # print('inside_path_level = ', inside_path_level)
+    # print('change_path_level = ', change_path_level)
+
+    if inside_path_level == 2:
+        return change_path
+
+    else:
+         point = '../'
+         font_point = ''
+         for i in range(inside_path_level-2):
+             font_point = font_point + point
+
+         new_path = font_point + change_path[2:]
+         return font_point + change_path[2:]
+
+
+# chang and connect the wr text 
+def change_connect(origin, embody, html_path):
+    len_o = len(origin)
+    len_e = len(embody)
+    if len_o == 2*len_e + 1:
+        for i in range(len_e):
+            origin[2*i + 1] = auto_change_link(html_path, embody[i][0])
+
+    return origin
+
+
+# get changed wayrouter content
+def get_wayrouted_content(way_path, html_path, way_router_path):
+
+    # print('html_path = ',  html_path)
+    # print('way_router_path = ',  way_router_path)
+    
+    wr_content_origin = read_files(way_path)
+    # print('wr_content_origin = ',  wr_content_origin)
+    
+    new_cont_set = []
+    sparated_set = get_sparate_set(wr_content_origin, '"./', '"', 0)
+    # print('sparated_set = ',  sparated_set, '\n')
+
+    text_sparated_list = sum_text_sparated(wr_content_origin, sparated_set)
+    # print('text_sparated_list = ', text_sparated_list,'\n')
+
+    # print('len(sparated_set) = ', len(sparated_set))
+    # print('len(text_sparated_list) = ', len(text_sparated_list),'\n')
+
+    updated_sparated_set = change_connect(text_sparated_list, sparated_set, html_path)
+    # print('get_list_str_in_all(updated_sparated_set) = ', get_list_str_in_all(updated_sparated_set))
+
+    return get_list_str_in_all(updated_sparated_set)
+
+
 # get the way segment content by way name
-def get_way_content(way_name, html_way_path):
-    all_way_path_item = get_all_items(html_way_path, [], [])
-    way_path = html_way_path + '/' + way_name + '.html'
+def get_way_content(way_name, way_class, html_path, html_way_path):
+   
+    # Handle the pure way 
+    if way_class == 'id':
+        all_way_path_item = get_all_items(html_way_path, [], [])
+        way_path = html_way_path + '/' + way_name + '.html'
 
-    # print('way_path = ', way_path, '\n')
-    # print('all_way_path_item[1] = ', all_way_path_item[1], '\n')
+        # print('way_path = ', way_path, '\n')
+        # print('all_way_path_item[1] = ', all_way_path_item[1], '\n')
 
-    flag_true_return = False
+        flag_true_return = False
 
-    for i_way in all_way_path_item[1]:
-        # print('i_way = ', i_way)
-        if i_way == way_path:
-            # print(' i_way == way_path = ', way_path)
-            flag_true_return = True
-            return read_files(way_path)
+        for i_way in all_way_path_item[1]:
+            # print('i_way = ', i_way)
+            if i_way == way_path:
+                # print(' i_way == way_path = ', way_path)
+                flag_true_return = True
+                return read_files(way_path)
 
-    if not flag_true_return:
-        return None
+        if not flag_true_return:
+            return None
+    
+    # Handle the way router
+    elif way_class == 'wr':
+        all_wayrouter_path = get_all_items(way_router_path, [], [])
+        way_path = way_router_path + '/' + way_name + '.html'
+        
+        # print('html_path = ', html_path)
+        # print('way_path = ', way_path, '\n')
+        # print('all_wayrouter_path[1] = ', all_wayrouter_path[1], '\n')
 
+        flag_true_return = False
+
+        for i_wr in all_wayrouter_path[1]:
+            # print('i_wr = ', i_wr)
+            if i_wr == way_path:
+                # print(' i_wr == way_path = ', way_path)
+                flag_true_return = True
+
+                # return read_files(way_path)
+                return get_wayrouted_content(way_path, html_path, way_router_path)
+
+        if not flag_true_return:
+            return None
 
 
 # get the combined string of original html ans way segments
-def get_html_add_segments(html_name, way_tag_set):
+def get_html_add_segments(html_path, way_tag_set):
     # Update to new html in html build
-    f_read = read_files(html_name)
+    f_read = read_files(html_path)
     html_add_segments = []
     way_tag_end_index = 0
     sum_way_tag_index = 0
@@ -268,7 +447,7 @@ def get_html_add_segments(html_name, way_tag_set):
     seg_origin = ''
 
     # print('>> get_html_add_segments()')
-    # print('html_name = ', html_name, '\n')
+    # print('html_path = ', html_path, '\n')
     # print('way_tag_set = ', way_tag_set, '\n')
 
     if way_tag_set_len > 0:
@@ -280,7 +459,7 @@ def get_html_add_segments(html_name, way_tag_set):
                 elif way_tag[1] > 0:
                     seg_origin = f_read[way_tag_end_index:way_tag[1]]
                 
-                seg_way_content = get_way_content(way_tag[0], html_way_path)
+                seg_way_content = get_way_content(way_tag[0], way_tag[3], html_path, html_way_path)
                 # print('seg_way_content = ', seg_way_content, '\n')
 
                 way_tag_end_index = way_tag[2]
@@ -361,33 +540,24 @@ def way_html():
     now_html_list = get_now_lists()[0]
     edit_path_len = len(html_edit_path)
 
-    for html_name in now_html_list:
+    # print('now_html_list = ', now_html_list)
 
-        html_name_to_build = html_build_path + html_name[edit_path_len:]
+    for html_path in now_html_list:
 
-        way_tag_set = get_way_tags_set(html_name)
+        html_path_to_build = html_build_path + html_path[edit_path_len:]
 
-        html_add_way_segments = get_html_add_segments(html_name, way_tag_set)
+        way_tag_set = get_way_tags_set(html_path)
+        # print('way_tag_set = ', way_tag_set)
 
+        html_add_way_segments = get_html_add_segments(html_path, way_tag_set)
         # print('html_add_way_segments = ', html_add_way_segments)
         # print('get_list_str_in_all(html_add_way_segments) = ', get_list_str_in_all(html_add_way_segments))
 
-        write_files(html_name_to_build, get_list_str_in_all(html_add_way_segments))
+        write_files(html_path_to_build, get_list_str_in_all(html_add_way_segments))
 
 
 
 # =============================================================================
-# Static Test :
-
-# way_html()
-# now_update_scander(html_edit_path, html_edit_path)
-
-# delete_extra_files()
-
-# a = get_way_content('css/css1', html_way_path)
-# print(a)
-
-
 # =============================================================================
 
 
@@ -447,6 +617,8 @@ if __name__ == "__main__":
 
     pass
     
+
+
 
 
 

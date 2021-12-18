@@ -3,11 +3,15 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Way - An easy and fast front-end generator library</title>
+    <title>
+        Way - An easy and fast front-end generator library
+    </title>
+    <link rel="icon" href="./pictures/icon/way.ico" />
+
 </head>
 
 <body>
-   <div class="HeadLine">
+    <div class="HeadLine">
     <div class="ToolBtn" onclick="Btn4()">Home</div>
     <div class="ToolBtn" onclick="Btn2()">About</div>
     <div class="ToolBtn" onclick="Btn6()">Tutorial</div>
@@ -20,49 +24,75 @@
         <div class="ZoomContent">
             <br />
             <br />
-            <div class="BigTitle">Way.Py &nbsp;1.03</div>
             <br />
-            <br /> 
-            <br /> 
-            <em style="font-size: 16px;"><h1><b><div class="TextCenter">No Way No Awesom</div></b></h1></em>
+            <div class="IconBox">
+    <img class="IconPic" src="./pictures/gif/way.gif" />
+</div>
             <br />
             <br />
-            <div class="Slogan">Way - An easy and fast front-end generator library</div>
-            <br /> 
-            <br /> 
+            <div class="BigTitle">Way.Py &nbsp;1.04</div>
+            <br />
+            <br />
+            <br />
+            <em style="font-size: 16px;">
+                <h1><b><div class="TextCenter">No Way No Awesom</div></b></h1>
+            </em>
+            <br />
+            <br />
+            <div class="Slogan">
+                Way - An easy and fast front-end generator library
+            </div>
+            <br />
+            <br />
             <h3>
     <div class="TextCenter">Founder and First Designer: Jinwei Lin.</div>
 </h3>
+            <br />
+            <br />
             <br /> 
-            <br /> 
-            <br /> 
-            <br /> 
+            <div style="font-size: 20px;">
+            <pre>
+         <b>Updation Note: </b>
+
+         1. Added the new main function of Way Auto-Router.
+         2. Update the structure of the project directories.
+         3. Added advanced feature of Deel-Dir Auto_Updation and Scanning.
+         4. Add icon and big way picture.
+         5. Tested the functions of adding in-html pictures of .png and .ico.
+
+
+         Dec, 14, 2021
+         (By Jinwei Lin:)
+</pre>
+            </div>
+            <br />
+            <br />
             <hr />
-            <br /> 
+            <br />
             <a href="http://www.ydook.com">www.ydook.com</a>&nbsp; &nbsp;
 <a href="https://github.com/JYLinOK">github.com/JYLinOK</a>&nbsp; &nbsp;
 <a href="https://github.com/JYLinOK/Way">github.com/Way</a>&nbsp; &nbsp;
 <a href="https://orcid.org/0000-0003-0558-6699">ORCID:0000-0003-0558-6699</a>&nbsp; &nbsp;
-            <br />  
-            <br /> 
-            <br /> 
+            <br />
+            <br />
+            <br />
         </div>
     </div>
 
 
+
 </body>
+
 
 <script>
     function Btn1() {
-        // window.open("https://ydook.blog.csdn.net/");
-        var curWwwPath = window.document.location.href;
-        console.log(curWwwPath);
+        window.open("https://ydook.blog.csdn.net/");
     }
     function Btn2() {
         window.location.href = "./about.html";
     }
     function Btn3() {
-        window.open("http://www.ydook.com/");
+        window.open("http://www.ydook.com");
     }
     function Btn4() {
         window.location.href = "./ydook.html";
@@ -78,6 +108,9 @@
     }
 </script>
 
+<script>
+    console.log('Way - An easy and fast front-end generator library');
+</script>
 <style>
     body {
         background: rgb(255, 255, 255);
@@ -106,6 +139,30 @@
         font-family: Arial, Helvetica, sans-serif;
         font-size: 36px;
         color: rgb(0, 128, 160);
+    }
+
+
+    .IconBox {
+        width: 100%;
+        background: rgb(255, 255, 255);
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .IconPic {
+        width: 36%;
+        background: black;
+        margin: 0 auto;
+        animation: moveway 1s;
+    }
+
+    @keyframes moveway {
+        0% {
+            transform:rotateY(0deg);
+        }
+        100% {
+            transform:rotateY(180deg);
+        }
     }
 </style>
 
@@ -157,6 +214,7 @@
         font-family: Arial, Helvetica, sans-serif;
     }
 </style>
+<!-- <way wr="wr1"></way> -->
 
 
 

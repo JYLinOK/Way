@@ -27,4 +27,28 @@
         font-size: 36px;
         color: rgb(0, 128, 160);
     }
+
+
+    .IconBox {
+        width: 100%;
+        background: rgb(255, 255, 255);
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .IconPic {
+        width: 36%;
+        background: black;
+        margin: 0 auto;
+        animation: moveway 1s;
+    }
+
+    @keyframes moveway {
+        0% {
+            transform:rotateY(0deg);
+        }
+        100% {
+            transform:rotateY(180deg);
+        }
+    }
 </style>

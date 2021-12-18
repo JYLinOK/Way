@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <title>Way - About</title>
+    <link rel="icon" href="./pictures/icon/way.ico" />
+
 </head>
 
 <body>
@@ -20,7 +22,12 @@
         <div class="ZoomContent">
             <br />
             <br />
-            <div class="BigTitle">Way.Py &nbsp;1.03</div>
+            <div class="IconBox">
+    <img class="IconPic" src="./pictures/gif/way.gif" />
+</div>
+            <br />
+            <br />
+            <div class="BigTitle">Way.Py &nbsp;1.04</div>
             <br />
             <br />
             <br />
@@ -28,25 +35,36 @@
             <br />  
             <br />  
             <br />  
-            <b><div style="font-size: 38px;" class="TextCenter">About Page</div></b>
-<br/>
+            <b>
+    <div style="font-size: 38px;" class="TextCenter">About Page</div>
+</b>
+<br />
 <h3 class="TextCenter">Contribution Honor List</h3>
 <table border="1" class="TextCenter">
     <tr>
-    <td>Version</td>
-    <td>Updated Time</td>
-    <td>Contributor</td>
+        <td>Version</td>
+        <td>Updated Time</td>
+        <td>Contributor</td>
     </tr>
     <tr>
         <td>Way 1.01</td>
         <td>December, 08, 2021</td>
         <td>Jinwei Lin</td>
-        </tr>
-        <tr>
-            <td>Way 1.02</td>
-            <td>December, 12, 2021</td>
-            <td>Jinwei Lin</td>
-            </tr>
+    </tr>
+    <tr>
+        <td>Way 1.02</td>
+        <td>December, 12, 2021</td>
+        <td>Jinwei Lin</td>
+    </tr>
+    <tr>
+        <td>Way 1.03</td>
+        <td>December, 13, 2021</td>
+        <td>Jinwei Lin</td>
+    </tr>
+    <td>Way 1.04</td>
+    <td>December, 14, 2021</td>
+    <td>Jinwei Lin</td>
+    </tr>
 </table>
             <br /> 
             <br /> 
@@ -62,15 +80,13 @@
 
 <script>
     function Btn1() {
-        // window.open("https://ydook.blog.csdn.net/");
-        var curWwwPath = window.document.location.href;
-        console.log(curWwwPath);
+        window.open("https://ydook.blog.csdn.net/");
     }
     function Btn2() {
         window.location.href = "./about.html";
     }
     function Btn3() {
-        window.open("http://www.ydook.com/");
+        window.open("http://www.ydook.com");
     }
     function Btn4() {
         window.location.href = "./ydook.html";
@@ -86,7 +102,9 @@
     }
 </script>
 
-
+<script>
+    console.log('Way - An easy and fast front-end generator library');
+</script>
 <style>
     body {
         background: rgb(255, 255, 255);
@@ -115,6 +133,30 @@
         font-family: Arial, Helvetica, sans-serif;
         font-size: 36px;
         color: rgb(0, 128, 160);
+    }
+
+
+    .IconBox {
+        width: 100%;
+        background: rgb(255, 255, 255);
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .IconPic {
+        width: 36%;
+        background: black;
+        margin: 0 auto;
+        animation: moveway 1s;
+    }
+
+    @keyframes moveway {
+        0% {
+            transform:rotateY(0deg);
+        }
+        100% {
+            transform:rotateY(180deg);
+        }
     }
 </style>
 
