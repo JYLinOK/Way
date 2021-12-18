@@ -1,12 +1,11 @@
-# Way1.0.6 - An easy and fast front-end generator library
+# Way1.0.7 - An easy and fast front-end generator library
 ***
 
 ## Updation Note: 
 
-1. Optimized the main modules.
-2. Debugged the function of showing .jpg pictures.
-3. Optimized the welcom text.
+1. Added the auto-restart function when meet exceptions.
 
 
-Dec, 16, 2021
+
+Dec, 17, 2021
 (By Jinwei Lin:)
