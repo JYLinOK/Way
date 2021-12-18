@@ -1,7 +1,5 @@
-# Way1.05 - An easy and fast front-end generator library
+# Way1.0.6 - An easy and fast front-end generator library
 ***
-
-## From the version (way1.05), the MAIN_LICENSES files comes into effect.
 
 ## Updation Note: 
 
@@ -10,5 +8,5 @@
 3. Optimized the welcom text.
 
 
-Dec, 15, 2021
+Dec, 16, 2021
 (By Jinwei Lin:)
