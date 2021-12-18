@@ -40,6 +40,10 @@ tag_name_list = os.listdir(html_way_path)
 # Get welcome context
 way_router_path = config_f_read_json['way_router_path']
 
+# Get way_announce
+way_announce = config_f_read_json['way_announce']
+way_announce_str = "<script>console.log('\\\A/ Hi, Way! - An easy and fast front-end generator library.');</script>"
+
 # Get welcome context
 welcome_path = config_f_read_json['welcome_path']
 welcome_context = config_f_read_json['welcome_context']
@@ -264,58 +268,71 @@ def get_way_tags_set(html_path):
 def get_sparate_set(origin, start_sign, end_sign, item_index):
     start_sign_len = len(start_sign)
     end_sign_len = len(end_sign)
-    # print('start_sign[0] = ', start_sign[0])
+
+    # print('origin = ', origin)
+    # print('start_sign = ', start_sign)
+    # print('end_sign = ', end_sign)
+    # print('item_index = ', item_index)
 
     start_index = 0
     result_set = []
 
-    for char_i in origin:
-        if char_i == start_sign[0]:
-            s_sign = origin[start_index: start_index + 3]
-            # print('start_sign = ', start_sign)
+    if origin != '':
+        for char_i in origin:
+            if char_i == start_sign[0]:
+                s_sign = origin[start_index: start_index + 3]
+                # print('start_sign = ', start_sign)
 
-            if s_sign == start_sign:
-                rest_origin = origin[start_index+1:]
-                # print('rest_origin = ', rest_origin)
+                if s_sign == start_sign:
+                    rest_origin = origin[start_index+1:]
+                    # print('rest_origin = ', rest_origin)
 
-                len_index = 0
-                for i_rest in rest_origin:
-                    # print(i_rest)
-
-                    if i_rest == end_sign:
+                    len_index = 0
+                    for i_rest in rest_origin:
                         # print(i_rest)
 
-                        sparated = origin[start_index+1:start_index+len_index+1]
-                        # print('sparated = ', sparated, '\n')
+                        if i_rest == end_sign:
+                            # print(i_rest)
 
-                        rest_origin = origin[start_index+len_index+2:]
-                        # print('rest_origin = ', rest_origin, '\n')
-                        
-                        item_index += 1
-                        # print('item_index = ', item_index, '\n')
-                        result_set.append([sparated, start_index+1, start_index+len_index+1, item_index-1]) 
-                        get_sparate_set(rest_origin, start_sign, end_sign, item_index-1)
-                        break
+                            sparated = origin[start_index+1:start_index+len_index+1]
+                            # print('sparated = ', sparated, '\n')
 
-                    len_index += 1
+                            rest_origin = origin[start_index+len_index+2:]
+                            # print('rest_origin = ', rest_origin, '\n')
 
-        start_index += 1
-    return result_set
+                            item_index += 1
+                            # print('item_index = ', item_index, '\n')
+                            result_set.append([sparated, start_index+1, start_index+len_index+1, item_index-1]) 
+                            get_sparate_set(rest_origin, start_sign, end_sign, item_index-1)
+                            break
+
+                        len_index += 1
+
+            start_index += 1
+        return result_set
+    else:
+        print("File Not Exist!")
 
 
 # get the segments of text by known sparated segments list
 def sum_text_sparated (origin_text, sparated_list):
     text_sparated_set = []
 
-    last_seg_index = 0 
-    for i_seg in sparated_list:
-        text_sparated_set.append(origin_text[last_seg_index:i_seg[1]])
-        text_sparated_set.append(i_seg[0])
-        last_seg_index = i_seg[2]
+    # print('\n', 'origin_text = ', origin_text)
+    # print('sparated_list = ', sparated_list, '\n')
 
-    text_sparated_set.append(origin_text[sparated_list[-1][2]:])
-    # print('text_sparated_set = ', text_sparated_set)
-    return text_sparated_set
+    if sparated_list != []:
+        last_seg_index = 0 
+        for i_seg in sparated_list:
+            text_sparated_set.append(origin_text[last_seg_index:i_seg[1]])
+            text_sparated_set.append(i_seg[0])
+            last_seg_index = i_seg[2]
+
+        text_sparated_set.append(origin_text[sparated_list[-1][2]:])
+        # print('text_sparated_set = ', text_sparated_set)
+        return text_sparated_set
+    else:
+        return origin_text
 
 
 # get the level of a path:
@@ -373,7 +390,7 @@ def get_wayrouted_content(way_path, html_path, way_router_path):
     # print('wr_content_origin = ',  wr_content_origin)
     
     new_cont_set = []
-    sparated_set = get_sparate_set(wr_content_origin, '"./', '"', 0)
+    sparated_set = get_sparate_set(wr_content_origin, '"./', '\"', 0)
     # print('sparated_set = ',  sparated_set, '\n')
 
     text_sparated_list = sum_text_sparated(wr_content_origin, sparated_set)
@@ -381,11 +398,12 @@ def get_wayrouted_content(way_path, html_path, way_router_path):
 
     # print('len(sparated_set) = ', len(sparated_set))
     # print('len(text_sparated_list) = ', len(text_sparated_list),'\n')
-
+    
     updated_sparated_set = change_connect(text_sparated_list, sparated_set, html_path)
-    # print('get_list_str_in_all(updated_sparated_set) = ', get_list_str_in_all(updated_sparated_set))
+    # print('get_list_str_in_all_wayrouter(updated_sparated_set) = ', get_list_str_in_all_wayrouter(updated_sparated_set))
 
-    return get_list_str_in_all(updated_sparated_set)
+    return get_list_str_in_all_wayrouter(updated_sparated_set)
+
 
 
 # get the way segment content by way name
@@ -471,13 +489,25 @@ def get_html_add_segments(html_path, way_tag_set):
 
 
 
-
 # Get the combination of all strings in a list
 def get_list_str_in_all(list_name):
     
     # print('>> get_list_str_in_all')
     # print('list_name = ', list_name)
+    if way_announce:
+        all_str = ''
+        for s in list_name:
+            if s != None:
+                if '</html>' in s:
+                    all_str = all_str + way_announce_str + s 
+                else: all_str += s
+        return all_str 
+    
 
+
+
+# et the combination of all strings in a wayrouter list
+def get_list_str_in_all_wayrouter(list_name):
     all_str = ''
     for s in list_name:
         if s != None:
@@ -565,31 +595,35 @@ def way_html():
 
 # delete_extra_files()
 
-# a = get_way_content('wr1', 'wr', './ydook.html', html_way_path)
-# print(a)
+# a = get_way_content('home/wr1', 'wr', './index.html', html_way_path)
+# print('a = \n', a)
 
-# way_path = './wayrouter/wr1.html'
+
+# way_path = './wayrouter/home/wr1.html'
 # html_path = './htmledit/a/ydook.html'
 # a = get_wayrouted_content(way_path, html_path, way_router_path)
-# print(a)
+# print('a = \n', a)
+
 
 # a = [1, 3, 5, 7, 9, 11, 13, 15]
 # b = [2, 4, 6, 8]
 # print(change_connect(a, b))
 
 
-# wr = './wayrouter/wr1.html'
+# wr = './wayrouter/home/wr1.html'
 # text = read_files(wr)
-# a = get_sparate_set(text, '"./', '"', 0)
-# print(a)
+# a = get_sparate_set(text, '"./', '\"', 0)
+# print('a = \n', a)
+
 
 # inside_path = './a/a/a/ydook.html'
 # change_path = './about.html'
 # a = auto_change_link(inside_path, change_path)
-# print('a = ', a)
+# print('a = \n', a)
+
+
 
 # =============================================================================
-
 
 
 
@@ -648,6 +682,18 @@ if __name__ == "__main__":
 
     pass
     
+
+
+# ======================================================================================
+# ======================================================================================
+
+
+
+
+
+
+
+
 
 
 
