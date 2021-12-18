@@ -1,11 +1,11 @@
-# Way1.0.7 - An easy and fast front-end generator library
+# Way1.0.8 - An easy and fast front-end generator library
 ***
 
 ## Updation Note: 
 
-1. Added the auto-restart function when meet exceptions.
+1. Handled the bug that if there is a None-Content file in wayrouter, the exception will occur.
 
 
 
-Dec, 17, 2021
+Dec, 18, 2021
 (By Jinwei Lin:)
