@@ -4,13 +4,12 @@
 
 ## Updation Note: 
 
-1. Basic and first version of Way.
-2. Founder by Jinwei Lin.
-3. Have a model html website.
-4. Can update the soure code automatically.
-5. Have three main function modules: htmlbuild, htmledit and htmlways.
+1. Added and tested the Way Auto-Router function.
+2. Changed the name of dir htmlways to htmlway.
+3. Added the auto-updation for deep-dir in both htmledit and htmlway.
+4. Added a new module of wayroad to save way router files.
+5. Renew the definition of config.json.
 
 
-
-Dec, 09, 2021
+Dec, 13, 2021
 (By Jinwei Lin:)
