@@ -337,12 +337,13 @@ def sum_text_sparated (origin_text, sparated_list):
     # print('\n', 'origin_text = ', origin_text)
     # print('sparated_list = ', sparated_list, '\n')
 
-    if sparated_list != []:
+    if sparated_list:
         last_seg_index = 0 
         for i_seg in sparated_list:
-            text_sparated_set.append(origin_text[last_seg_index:i_seg[1]])
-            text_sparated_set.append(i_seg[0])
-            last_seg_index = i_seg[2]
+            if i_seg:
+                text_sparated_set.append(origin_text[last_seg_index:i_seg[1]])
+                text_sparated_set.append(i_seg[0])
+                last_seg_index = i_seg[2]
 
         text_sparated_set.append(origin_text[sparated_list[-1][2]:])
         # print('text_sparated_set = ', text_sparated_set)
@@ -387,11 +388,12 @@ def auto_change_link(inside_path, change_path):
 
 # chang and connect the wr text 
 def change_connect(origin, embody, html_path):
-    len_o = len(origin)
-    len_e = len(embody)
-    if len_o == 2*len_e + 1:
-        for i in range(len_e):
-            origin[2*i + 1] = auto_change_link(html_path, embody[i][0])
+    if origin and embody:
+        len_o = len(origin)
+        len_e = len(embody)
+        if len_o == 2*len_e + 1:
+            for i in range(len_e):
+                origin[2*i + 1] = auto_change_link(html_path, embody[i][0])
 
     return origin
 
