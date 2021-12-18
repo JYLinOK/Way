@@ -38,6 +38,10 @@ home_index_html = os.getcwd() + '/' + config_f_read_json['home_index_html']
 tag_name_list = os.listdir(html_way_path)
 
 # Get welcome context
+way_road_path = config_f_read_json['way_road_path']
+
+
+# Get welcome context
 welcome_path = config_f_read_json['welcome_path']
 welcome_context = config_f_read_json['welcome_context']
 
@@ -45,8 +49,8 @@ if welcome_context:
     with open(welcome_path, 'r',  encoding='UTF-8') as welcome_f:
         print(welcome_f.read())
     # print time
-    print('______________________________________________________________________________\n')
-    print('>> Run Time:', time.strftime( "%a %b,%d %H:%M:%S %Y", time.localtime()))
+    print('______________________________________________________________________________')
+    print('>> Run Time:', time.strftime( "%a %b,%d %H:%M:%S %Y", time.localtime()), '\n')
 
 
 # Get above father dir
@@ -164,11 +168,12 @@ def read_files(file_path):
             fr_read = fr.read()
             return fr_read
     except IOError:
-        print('IOError: read_files error!')
+        print('IOError: read_files() error!')
         pass
     else:
         pass
         # print('Success!')
+
 
 # Get id context
 def get_id_context(tag):
@@ -223,21 +228,48 @@ def get_way_tags_set(html_name):
             return way_tags_set
 
     except IOError:
-        print('IOError: get_way_tags_set error!')
+        print('IOError: get_way_tags_set() error!')
         pass
     else:
         pass
         # print('Success!')
 
 
-def get_html_segments(html_name, way_tag_set):
+# get the way segment content by way name
+def get_way_content(way_name, html_way_path):
+    all_way_path_item = get_all_items(html_way_path, [], [])
+    way_path = html_way_path + '/' + way_name + '.html'
+
+    # print('way_path = ', way_path, '\n')
+    # print('all_way_path_item[1] = ', all_way_path_item[1], '\n')
+
+    flag_true_return = False
+
+    for i_way in all_way_path_item[1]:
+        # print('i_way = ', i_way)
+        if i_way == way_path:
+            # print(' i_way == way_path = ', way_path)
+            flag_true_return = True
+            return read_files(way_path)
+
+    if not flag_true_return:
+        return None
+
+
+
+# get the combined string of original html ans way segments
+def get_html_add_segments(html_name, way_tag_set):
     # Update to new html in html build
     f_read = read_files(html_name)
-    html_segments = []
+    html_add_segments = []
     way_tag_end_index = 0
     sum_way_tag_index = 0
     way_tag_set_len = len(way_tag_set)
+    seg_origin = ''
 
+    # print('>> get_html_add_segments()')
+    # print('html_name = ', html_name, '\n')
+    # print('way_tag_set = ', way_tag_set, '\n')
 
     if way_tag_set_len > 0:
         for way_tag in way_tag_set:
@@ -247,22 +279,31 @@ def get_html_segments(html_name, way_tag_set):
                     seg_origin = ''
                 elif way_tag[1] > 0:
                     seg_origin = f_read[way_tag_end_index:way_tag[1]]
+                
+                seg_way_content = get_way_content(way_tag[0], html_way_path)
+                # print('seg_way_content = ', seg_way_content, '\n')
 
-                seg_way = read_files(html_way_path + '/' + way_tag[0] + '.html')
                 way_tag_end_index = way_tag[2]
 
-                html_segments.append(seg_origin)
-                html_segments.append(seg_way)
+                html_add_segments.append(seg_origin)
+                html_add_segments.append(seg_way_content)
 
-        html_segments.append(f_read[way_tag_end_index + 1:])
-    return html_segments
+        html_add_segments.append(f_read[way_tag_end_index + 1:])
+    return html_add_segments
 
 
 # Get the combination of all strings in a list
 def get_list_str_in_all(list_name):
+    
+    # print('>> get_list_str_in_all')
+    # print('list_name = ', list_name)
+
     all_str = ''
     for s in list_name:
-        all_str += s
+        if s != None:
+            all_str += s
+
+    # print('\nall_str = ', all_str)
     return all_str
 
 
@@ -326,17 +367,28 @@ def way_html():
 
         way_tag_set = get_way_tags_set(html_name)
 
-        html_segments = get_html_segments(html_name, way_tag_set)
+        html_add_way_segments = get_html_add_segments(html_name, way_tag_set)
 
-        write_files(html_name_to_build, get_list_str_in_all(html_segments))
+        # print('html_add_way_segments = ', html_add_way_segments)
+        # print('get_list_str_in_all(html_add_way_segments) = ', get_list_str_in_all(html_add_way_segments))
+
+        write_files(html_name_to_build, get_list_str_in_all(html_add_way_segments))
 
 
+
+# =============================================================================
 # Static Test :
 
 # way_html()
 # now_update_scander(html_edit_path, html_edit_path)
 
 # delete_extra_files()
+
+# a = get_way_content('css/css1', html_way_path)
+# print(a)
+
+
+# =============================================================================
 
 
 
@@ -393,7 +445,7 @@ if __name__ == "__main__":
     p_file_path.start()
     p_file_way.start()
 
-
+    pass
     
 
 
