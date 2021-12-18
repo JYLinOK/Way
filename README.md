@@ -1,13 +1,14 @@
-# Way1.04 - An easy and fast front-end generator library
+# Way1.05 - An easy and fast front-end generator library
 ***
 
+## From the version (way1.05), the MAIN_LICENSES files comes into effect.
 
 ## Updation Note: 
 
-1. Added and tested the auto-updation for the Way Auto-Router module.
-2. Update the model website strcute
-3. Tested the implements of appling the pictures, including the follow formats of: .ico, .png and .gif. 
+1. Optimized the main modules.
+2. Debugged the function of showing .jpg pictures.
+3. Optimized the welcom text.
 
 
-Dec, 14, 2021
+Dec, 15, 2021
 (By Jinwei Lin:)
