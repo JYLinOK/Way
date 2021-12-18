@@ -22,15 +22,13 @@
 </div>
     <div class="MainBox">
         <div class="ZoomContent">
-            <br />
-            <br />
-            <br />
             <div class="IconBox">
     <img class="IconPic" src="./pictures/gif/way.gif" />
 </div>
             <br />
             <br />
-            <div class="BigTitle">Way.Py &nbsp;1.04</div>
+            <br />
+            <div class="BigTitle">Way.Py &nbsp;1.05</div>
             <br />
             <br />
             <br />
@@ -53,15 +51,13 @@
             <div style="font-size: 20px;">
             <pre>
          <b>Updation Note: </b>
-
-         1. Added the new main function of Way Auto-Router.
-         2. Update the structure of the project directories.
-         3. Added advanced feature of Deel-Dir Auto_Updation and Scanning.
-         4. Add icon and big way picture.
-         5. Tested the functions of adding in-html pictures of .png and .ico.
-
-
-         Dec, 14, 2021
+         
+         1. Optimized the main modules.
+         2. Debugged the function of showing .jpg pictures.
+         3. Optimized the welcom text.
+         
+         
+         Dec, 15, 2021
          (By Jinwei Lin:)
 </pre>
             </div>
@@ -127,10 +123,12 @@
     }
 
     .BigTitle {
+        margin: 0 auto;
         font-size: 66px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-weight: 666;
         margin-left: 2%;
+        margin-top: 12%;
         color: rgb(0, 82, 71);
     }
 
@@ -141,24 +139,52 @@
         color: rgb(0, 128, 160);
     }
 
+    .LinePic {
+        padding: 30px;
+        width: 20%;
+        background: black;
+        margin: 0 auto;
+        animation: moveway 3s;
+    }
 
-    .IconBox {
+    .CenterBox{
+        float: left;
         width: 100%;
+        height: auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
         background: rgb(255, 255, 255);
         margin: 0 auto;
         text-align: center;
     }
 
+    .IconBox {
+        float: left;
+        width: 101%;
+        height: auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        /* background: rgb(255, 255, 255); */
+        background: rgb(6, 66, 66);
+        margin: 0 auto;
+        text-align: center;
+        margin-left: -6px;
+        margin-top: -6px;
+    }
+
     .IconPic {
-        width: 36%;
+        width: 30%;
         background: black;
         margin: 0 auto;
-        animation: moveway 1s;
+        animation: moveway 3s infinite;
     }
 
     @keyframes moveway {
         0% {
             transform:rotateY(0deg);
+        }
+        30% {
+            transform:rotateY(180deg);
         }
         100% {
             transform:rotateY(180deg);
@@ -208,13 +234,11 @@
         background: rgb(2, 218, 207);
     }
 
-
     .TextCenter{
         margin-left: 10%;
         font-family: Arial, Helvetica, sans-serif;
     }
 </style>
-<!-- <way wr="wr1"></way> -->
 
 
 

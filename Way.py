@@ -40,7 +40,6 @@ tag_name_list = os.listdir(html_way_path)
 # Get welcome context
 way_router_path = config_f_read_json['way_router_path']
 
-
 # Get welcome context
 welcome_path = config_f_read_json['welcome_path']
 welcome_context = config_f_read_json['welcome_context']
@@ -471,6 +470,8 @@ def get_html_add_segments(html_path, way_tag_set):
     return html_add_segments
 
 
+
+
 # Get the combination of all strings in a list
 def get_list_str_in_all(list_name):
     
@@ -481,9 +482,7 @@ def get_list_str_in_all(list_name):
     for s in list_name:
         if s != None:
             all_str += s
-
-    # print('\nall_str = ', all_str)
-    return all_str
+    return all_str 
 
 
 # Delete the extra files in building folder
@@ -558,7 +557,39 @@ def way_html():
 
 
 # =============================================================================
+# Static Test :
+
+# way_html()
+
+# now_update_scander(html_edit_path, html_edit_path)
+
+# delete_extra_files()
+
+# a = get_way_content('wr1', 'wr', './ydook.html', html_way_path)
+# print(a)
+
+# way_path = './wayrouter/wr1.html'
+# html_path = './htmledit/a/ydook.html'
+# a = get_wayrouted_content(way_path, html_path, way_router_path)
+# print(a)
+
+# a = [1, 3, 5, 7, 9, 11, 13, 15]
+# b = [2, 4, 6, 8]
+# print(change_connect(a, b))
+
+
+# wr = './wayrouter/wr1.html'
+# text = read_files(wr)
+# a = get_sparate_set(text, '"./', '"', 0)
+# print(a)
+
+# inside_path = './a/a/a/ydook.html'
+# change_path = './about.html'
+# a = auto_change_link(inside_path, change_path)
+# print('a = ', a)
+
 # =============================================================================
+
 
 
 
@@ -617,6 +648,9 @@ if __name__ == "__main__":
 
     pass
     
+
+
+
 
 
 

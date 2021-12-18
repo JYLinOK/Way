@@ -1,8 +1,8 @@
 {
-    "welcome_path": "./welcome.txt",
     "welcome_context": true,
     "html_way_path": "./htmlway",
     "html_edit_path": "./htmledit",
+    "welcome_path": "./welcome.txt",
     "html_build_path": "./htmlbuild",
     "home_index_html": "./htmlbuild/ydook.html",
     "way_router_path": "./wayrouter",
