@@ -1,18 +1,17 @@
 import os
-import sys
 import json
 import time
 import shutil
 import hashlib
 import webbrowser
-import multiprocessing
+from pathlib import Path
+from multiprocessing import Process, Queue
 
-print('_____________________________________________________________________________')
-print(' Way.py: founded by Jinwei Lin: an easy and fast front-end generator library.')
-print('_____________________________________________________________________________')
 
+# ============================================================================================================
+# ============================================================================================================
 # Load the config
-with open('./config.json', 'r',  encoding='UTF-8') as config_f:
+with open('./wayconfig.json', 'r',  encoding='UTF-8') as config_f:
     config_f_read = config_f.read()
     config_f_read_json = json.loads(config_f_read)
 
@@ -42,31 +41,49 @@ tag_name_list = os.listdir(html_way_path)
 way_router_path = config_f_read_json['way_router_path']
 
 # Get auto restart
-auto_restart = config_f_read_json['way_router_path']
+auto_restart = config_f_read_json['auto_restart']
 
 # Get way_announce
 way_announce = config_f_read_json['way_announce']
-way_announce_str = "<script>console.log('\\\A/ Hi, Way! - An easy and fast front-end generator library.');</script>"
+way_announce_str = "<script>console.log('\\\A/ Hi, Way! - An easy and fast front-end generator framework.');</script>"
 
 # Get welcome context
 welcome_path = config_f_read_json['welcome_path']
 welcome_context = config_f_read_json['welcome_context']
 
-if welcome_context:
-    with open(welcome_path, 'r',  encoding='UTF-8') as welcome_f:
-        print(welcome_f.read())
-    # print time
-    print('______________________________________________________________________________')
-    print('>> Way: Run Time:', time.strftime( "%a %b,%d %H:%M:%S %Y", time.localtime()), '\n')
+# Get auto restart speed
+auto_restart_seed = config_f_read_json['auto_restart_seed']
+
+# Define welcome text show only one time
+welcome_got = False
+
+
+
 
 # ============================================================================================================
 # ============================================================================================================
+# Set welcome
+def welcome_show():
+    global welcome_got
+    if not welcome_got:
+        if welcome_context:
+            print('_____________________________________________________________________________')
+            print(' Way.py: founded by Jinwei Lin: an easy and fast front-end generator library.')
+            print('_____________________________________________________________________________')
+
+            with open(welcome_path, 'r',  encoding='UTF-8') as welcome_f:
+                print(welcome_f.read())
+            # print time
+            print('______________________________________________________________________________')
+            print('>> Way: Run Time:', time.strftime( "%a %b,%d %H:%M:%S %Y", time.localtime()), '\n')
+            welcome_got = True
+
 # Auto-restart 
 def auto_restart():
     if auto_restart:
-        print('Way: Restarting...')
-        sys.exit(0)
+        time.sleep(auto_restart_seed)
         os.system('python Way.py')
+        print('>> Way: Restarted')
 
 
 # Get above father dir
@@ -77,19 +94,27 @@ def get_father_dir(son_dir):
 
 # Get all items in a dir
 def get_all_items(now_dir, dir_set, file_set):
-    now_item_list = os.listdir(now_dir)
 
-    if now_item_list != []:
-        for item_name in now_item_list:
-            if if_files(item_name)[0]:
-                file_set.append(now_dir + '/' + item_name)
+    if os.path.exists(now_dir):
+        now_item_list = os.listdir(now_dir)
+        # print('now_item_list = ', now_item_list)
 
-            elif not if_files(item_name)[0]:
-                new_dir = now_dir + '/' + item_name
-                dir_set.append(new_dir)
-                get_all_items(new_dir, dir_set, file_set)
+        if now_item_list != []:
+            for item_name in now_item_list:
+                # print('item_name = ', item_name)
+                now_dir_file = now_dir + '/' + item_name
+                item_is_file = if_is_file(now_dir_file)[0]
 
-    return [dir_set, file_set]
+                if item_is_file:
+                    # print('is file', '\n')
+                    file_set.append(now_dir_file)
+
+                elif not item_is_file:
+                    # print('is dir', '\n')
+                    dir_set.append(now_dir_file)
+                    get_all_items(now_dir_file, dir_set, file_set)
+
+        return [dir_set, file_set]
     
 
 
@@ -117,13 +142,10 @@ def get_now_lists():
 
 
 #  judge if item is file
-def if_files(item_name):
-    if '.' in item_name:
-        point_index = item_name.index('.')
-        f_extension = item_name[point_index+1:]
-
-        if f_extension != '':
-            return [True, f_extension]
+def if_is_file(item_name):
+    f_extension = os.path.splitext(item_name)[1] 
+    if Path(item_name).is_file():
+        return [True, f_extension]
     else:
         return [False, None]
 
@@ -138,31 +160,40 @@ def copy_file(copy_path, paste_path):
 # Get now lists
 def now_update_scander(a_dir, edit_path):
     # Get files or directories list
+    # print('\na_dir = ', a_dir)
+
     now_dir_scanning = a_dir
     files_list = os.listdir(now_dir_scanning)
+    # print('files_list = ', files_list)
 
     # Scaner the files or directories
     if files_list != []:
         for item_name in files_list:
-            now_dir_scanning = a_dir + '/' + item_name
-            # print('now_dir_scanning = ', now_dir_scanning)
+            # if not item_name:
+                # print('item_name = ', item_name)
+                now_dir_scanning = a_dir + '/' + item_name
 
-            if not if_files(item_name)[0]:
-                build_dir_path = html_build_path + now_dir_scanning[len(edit_path):]
+                # print('now_dir_scanning = ', now_dir_scanning)
+                # print('if_is_file(now_dir_scanning)[0] = ', if_is_file(now_dir_scanning)[0], '\n')
 
-                if not os.path.exists(build_dir_path):
-                    os.makedirs(build_dir_path)
-                
-                # update iteration
-                now_update_scander(now_dir_scanning, edit_path)
+                # if item_name is a dir name
+                if not if_is_file(now_dir_scanning)[0]:
+                    build_dir_path = html_build_path + now_dir_scanning[len(edit_path):]
+                    # print('not file: build_dir_path = ', build_dir_path,'\n')
 
+                    if not os.path.exists(build_dir_path):
+                        os.makedirs(build_dir_path)
 
-            # if item_name is a file name
-            elif not item_name.endswith('.html'):
-                build_file_path = html_build_path + now_dir_scanning[len(edit_path):]
+                    # update iteration
+                    now_update_scander(now_dir_scanning, edit_path)
 
-                if not os.path.exists(build_file_path):
-                    copy_file(now_dir_scanning, build_file_path)
+                # if item_name is a file name
+                elif not item_name.endswith('.html'):
+                    build_file_path = html_build_path + now_dir_scanning[len(edit_path):]
+                    # print('is file: build_dir_path = ', build_file_path,'\n')
+
+                    if not os.path.exists(build_file_path):
+                        copy_file(now_dir_scanning, build_file_path)
 
 
 # Write file
@@ -172,25 +203,25 @@ def write_files(file_path, file_str):
             fw.write(file_str)
     except IOError:
         print('IOError: write_files error!')
-        auto_restart()
-        pass
-    else:
-        pass
-        # print('Success!')
+        try:
+            write_files(file_path, file_str)
+        except IOError:
+            auto_restart()
+
 
 # Read file
 def read_files(file_path):
-    try:
-        with open(file_path, 'r', encoding='UTF-8') as fr:
-            fr_read = fr.read()
-            return fr_read
-    except IOError:
-        print('IOError: read_files() error!')
-        auto_restart()
-        pass
-    else:
-        pass
-        # print('Success!')
+    if Path(file_path).is_file():  
+        try:
+            with open(file_path, 'r', encoding='UTF-8') as fr:
+                fr_read = fr.read()
+                return fr_read
+        except IOError:
+            print('IOError: read_files() error!')
+            try:
+                read_files(file_path)
+            except IOError:
+                auto_restart()
 
 
 # Get id context
@@ -229,105 +260,111 @@ def get_wr_context(tag):
 
 # Get way tags set
 def get_way_tags_set(html_path):
-    way_tags_set = []
-    # with open(html_edit_path + '/' + html_path, 'r+', encoding='UTF-8') as fr:
-    try:
-        with open(html_path, 'r', encoding='UTF-8') as fr:
-            # Get the file content
-            f_read = fr.read()
-            # Define the index
-            index = 0
-            start_index = 0
-            new_tag = False
+    if Path(html_path).is_file():    
+        way_tags_set = []
+        # with open(html_edit_path + '/' + html_path, 'r+', encoding='UTF-8') as fr:
+        try:
+            with open(html_path, 'r', encoding='UTF-8') as fr:
+                # Get the file content
+                f_read = fr.read()
+                # Define the index
+                index = 0
+                start_index = 0
+                new_tag = False
 
-            for char_i in f_read:
-                if not new_tag:
-                    if char_i == '<':
-                        new_tag = True
-                        start_index = index
-                if new_tag:
-                    if char_i == '>':
-                        new_tag = False
-                        end_index = index
-                        # get tage segment
-                        tag = f_read[start_index: end_index + 1]
-                        # print('tag = ', tag)
+                for char_i in f_read:
+                    if not new_tag:
+                        if char_i == '<':
+                            new_tag = True
+                            start_index = index
+                    if new_tag:
+                        if char_i == '>':
+                            new_tag = False
+                            end_index = index
+                            # get tage segment
+                            tag = f_read[start_index: end_index + 1]
+                            # print('tag = ', tag)
 
-                        # Handel the way tags
-                        if tag[0:5] == '<way ':
-                            # test whether have a id
-                            id_context = get_id_context(tag)
-                            if id_context:
-                                way_tags_set.append([id_context, start_index, end_index + 7, 'id'])
-                                # print()
+                            # Handel the way tags
+                            if tag[0:5] == '<way ':
+                                # test whether have a id
+                                id_context = get_id_context(tag)
+                                if id_context:
+                                    way_tags_set.append([id_context, start_index, end_index + 7, 'id'])
+                                    # print()
 
-                            # if the way-tag is a wayrouter tag
-                            else:
-                                wr_context = get_wr_context(tag)
-                                if wr_context:
-                                    way_tags_set.append([wr_context, start_index, end_index + 7, 'wr'])
-                                    # print('\nwr_context way_tags_set = ', wr_context)
+                                # if the way-tag is a wayrouter tag
+                                else:
+                                    wr_context = get_wr_context(tag)
+                                    if wr_context:
+                                        way_tags_set.append([wr_context, start_index, end_index + 7, 'wr'])
+                                        # print('\nwr_context way_tags_set = ', wr_context)
 
-                index += 1
-            return way_tags_set
+                    index += 1
+                return way_tags_set
 
-    except IOError:
-        print('IOError: get_way_tags_set() error!')
-        auto_restart()
-        pass
-    else:
-        pass
-        # print('Success!')
+        except IOError:
+            print('IOError: get_way_tags_set() error!')
+            try:
+                get_way_tags_set(html_path)
+            except IOError:
+                auto_restart()
 
 
 # get sparated set of text
 def get_sparate_set(origin, start_sign, end_sign, item_index):
-    start_sign_len = len(start_sign)
-    end_sign_len = len(end_sign)
-
-    # print('origin = ', origin)
-    # print('start_sign = ', start_sign)
-    # print('end_sign = ', end_sign)
-    # print('item_index = ', item_index)
-
-    start_index = 0
-    result_set = []
-
     if origin != '':
-        for char_i in origin:
-            if char_i == start_sign[0]:
-                s_sign = origin[start_index: start_index + 3]
-                # print('start_sign = ', start_sign)
+        start_sign_len = len(start_sign)
+        end_sign_len = len(end_sign)
 
-                if s_sign == start_sign:
-                    rest_origin = origin[start_index+1:]
-                    # print('rest_origin = ', rest_origin)
+        # print('origin = ', origin)
+        # print('start_sign = ', start_sign)
+        # print('end_sign = ', end_sign)
+        # print('item_index = ', item_index)
 
-                    len_index = 0
-                    for i_rest in rest_origin:
-                        # print(i_rest)
+        start_index = 0
+        result_set = []
 
-                        if i_rest == end_sign:
+        try:
+            for char_i in origin:
+                if char_i == start_sign[0]:
+                    s_sign = origin[start_index: start_index + 3]
+                    # print('start_sign = ', start_sign)
+
+                    if s_sign == start_sign:
+                        rest_origin = origin[start_index+1:]
+                        # print('rest_origin = ', rest_origin)
+
+                        len_index = 0
+                        for i_rest in rest_origin:
                             # print(i_rest)
 
-                            sparated = origin[start_index+1:start_index+len_index+1]
-                            # print('sparated = ', sparated, '\n')
+                            if i_rest == end_sign:
+                                # print(i_rest)
 
-                            rest_origin = origin[start_index+len_index+2:]
-                            # print('rest_origin = ', rest_origin, '\n')
+                                sparated = origin[start_index+1:start_index+len_index+1]
+                                # print('sparated = ', sparated, '\n')
 
-                            item_index += 1
-                            # print('item_index = ', item_index, '\n')
-                            result_set.append([sparated, start_index+1, start_index+len_index+1, item_index-1]) 
-                            get_sparate_set(rest_origin, start_sign, end_sign, item_index-1)
-                            break
+                                rest_origin = origin[start_index+len_index+2:]
+                                # print('rest_origin = ', rest_origin, '\n')
 
-                        len_index += 1
+                                item_index += 1
+                                # print('item_index = ', item_index, '\n')
+                                result_set.append([sparated, start_index+1, start_index+len_index+1, item_index-1]) 
+                                get_sparate_set(rest_origin, start_sign, end_sign, item_index-1)
+                                break
 
-            start_index += 1
-        return result_set
-    else:
-        print("File Not Exist!")
+                            len_index += 1
+
+                start_index += 1
+            return result_set
+
+        except IOError:
+            print('IOError: get_sparate_set() error!')
+            try:
+                get_sparate_set(origin, start_sign, end_sign, item_index)
+            except IOError:
+                auto_restart()
 
 
 # get the segments of text by known sparated segments list
@@ -552,15 +589,16 @@ def delete_extra_files():
 
         if f_built_2_edit not in all_edit_path_item[1]:
             # print('file ========>', f_built_2_edit, ' not in all_edit_path_item\n')
-            try:
-                os.remove(f_built_file)
-            except IOError:
-                print('IOError: in delete_extra_files()!')
-                auto_restart()
-                pass
-            else:
-                pass
-                # print('Success!')
+            if Path(f_built_file).is_file():
+                try:
+                    os.remove(f_built_file)
+                except IOError:
+                    print('IOError: in delete_extra_files()!')
+                    try:
+                        os.remove(f_built_file)
+                    except IOError:
+                        auto_restart()
+    
         
     # delete excess dirs
     for f_built_dir in all_build_path_item[0]:
@@ -569,16 +607,17 @@ def delete_extra_files():
 
         if f_built_2_edit not in all_edit_path_item[0]:
             # print('dir ========>', f_built_2_edit, ' not in all_edit_path_item\n')
-
-            try:
-                shutil.rmtree(f_built_dir)
-            except IOError:
-                auto_restart()
-                print('IOError: in delete_extra_files()!')
-                pass
-            else:
-                pass
-                # print('Success!')
+            if Path(f_built_dir).is_dir():
+                try:
+                    shutil.rmtree(f_built_dir)
+                except IOError:
+                    print('IOError: in delete_extra_files()!')
+                    time.sleep(1)
+                    shutil.rmtree(f_built_dir)
+                    pass
+                else:
+                    pass
+                    # print('Success!')
 
     # print()
 
@@ -589,19 +628,27 @@ def way_html():
     edit_path_len = len(html_edit_path)
 
     # print('now_html_list = ', now_html_list)
+    try:
+        for html_path in now_html_list:
+            html_path_to_build = html_build_path + html_path[edit_path_len:]
 
-    for html_path in now_html_list:
+            way_tag_set = get_way_tags_set(html_path)
+            # print('way_tag_set = ', way_tag_set)
 
-        html_path_to_build = html_build_path + html_path[edit_path_len:]
+            html_add_way_segments = get_html_add_segments(html_path, way_tag_set)
+            # print('html_add_way_segments = ', html_add_way_segments)
+            # print('get_list_str_in_all(html_add_way_segments) = ', get_list_str_in_all(html_add_way_segments))
 
-        way_tag_set = get_way_tags_set(html_path)
-        # print('way_tag_set = ', way_tag_set)
+            write_files(html_path_to_build, get_list_str_in_all(html_add_way_segments))
+        
+    except IOError:
+        print('IOError: way_html error!')
+        try:
+            way_html()
+        except IOError:
+            auto_restart()
 
-        html_add_way_segments = get_html_add_segments(html_path, way_tag_set)
-        # print('html_add_way_segments = ', html_add_way_segments)
-        # print('get_list_str_in_all(html_add_way_segments) = ', get_list_str_in_all(html_add_way_segments))
-
-        write_files(html_path_to_build, get_list_str_in_all(html_add_way_segments))
+   
 
 
 
@@ -642,46 +689,79 @@ def way_html():
 
 # auto_restart()
 
+
+# a = './tutorials/v1.0.8'
+# print(if_is_file(a))
+
+
+# while True:
+#     now_update_scander(html_edit_path, html_edit_path)
+#     delete_extra_files()
+#     time.sleep(1)
+#     # print('------>')
+#     way_html()
+
+
 # =============================================================================
 # =============================================================================
 
-
-# Way monitor for file individual update
-def way_monitor_file_path(pipe):
-    while True:
-        try:
-            now_update_scander(html_edit_path, html_edit_path)
-            delete_extra_files()
-            time.sleep(auto_scaner_seed)
-        except IOError:
-            print('IOError: way_monitor_file_path error!')
-            auto_restart()
-            pass
-        else:
-            pass
-            # print('Success!')
-       
-
-# Way monitor for file content update
-def way_monitor_file_way(pipe):
-    # Use JSON to finish
+# Run the web browser
+def run_browser():
+    # Get specified browser location 
     index_url = home_index_html
     browser_path = browser_exe_path
 
     try:
+        # Run specified browser
         if os.path.exists(browser_path):
             webbrowser.register('browser', None, webbrowser.BackgroundBrowser(browser_path))
             browser = webbrowser.get('browser')
             browser.open(index_url, new=0, autoraise=True)
+        # Run normal browser
         else:
             webbrowser.open(index_url, new=0, autoraise=True)
-
-        while True:
-            way_html()
-            time.sleep(auto_generate_seed)
     except IOError:
-        print('IOError: way_monitor_file_way error!')
-        auto_restart()
+        print('IOError: run_browser error!')
+        try:
+            run_browser()
+        except IOError:
+            auto_restart()
+
+
+# Way monitor for file individual update
+def way_update_structure(q):
+    try:
+        while True:
+            now_update_scander(html_edit_path, html_edit_path)
+            delete_extra_files()
+            q.put('structure')
+            time.sleep(auto_scaner_seed)
+          
+    except IOError:
+        print('IOError: way_update_structure error!')
+        way_update_structure(q)
+        pass
+    else:
+        pass
+        # print('Success!')
+
+
+# Way monitor for file content update
+def way_update_keyfiles(q):
+    # print('q.get() = ', q.get())
+
+    try:
+        run_browser()
+        while True:
+            if q.get() == 'structure':
+                # print('q.get() = ', q.get())
+                # print('q.empty() = ', q.empty(), '\n')
+                way_html()
+                time.sleep(auto_generate_seed)
+        
+    except IOError:
+        print('IOError: way_update_keyfiles error!')
+        way_update_keyfiles(q)
         pass
     else:
         pass
@@ -690,16 +770,35 @@ def way_monitor_file_way(pipe):
    
 
 
+# ============================================================================================================
+# ============================================================================================================
 # Main RUN WAY
 if __name__ == "__main__":
-    # Set pipe
-    file_pipe = multiprocessing.Pipe()
-    # Set Processes
-    p_file_path = multiprocessing.Process(target=way_monitor_file_path, args=(file_pipe[0],))
-    p_file_way = multiprocessing.Process(target=way_monitor_file_way, args=(file_pipe[1],))
+    # Show welcom
+    welcome_show()
 
-    p_file_path.start()
-    p_file_way.start()
+    # Set Queue
+    q = Queue()
+    q_structure = Process(target=way_update_structure, args=(q,))
+    q_keyfiles = Process(target=way_update_keyfiles, args=(q,))
+
+    # Start Process
+    q_structure.start()
+    q_keyfiles.start()
+
+    # Join Process
+    q_structure.join()
+    q_keyfiles.join()
+
+
+
+
+
+
+        
+          
+        
+
 
     pass
     
@@ -707,10 +806,6 @@ if __name__ == "__main__":
 
 # ======================================================================================
 # ======================================================================================
-
-
-
-
 
 
 

@@ -1,0 +1,155 @@
+<script>
+    function MenuFold() {
+        var Div = document.getElementById('MenuPanel');
+        if (Div.style.display == 'none') {
+            Div.style.display = 'block';
+        } else {
+            Div.style.display = 'none';
+        }
+    }
+
+    function Menu(obj, ulID) {
+        var ulDiv = document.getElementById(ulID);
+        if (ulDiv.style.display == 'none') {
+            ulDiv.style.display = 'block';
+        } else {
+            ulDiv.style.display = 'none';
+        }
+    }
+
+    function GoLi(ilID) {
+        var newLink = './way' + ilID + '.html'
+        window.location.href = newLink;
+    }
+
+    function MenuDown(event) {
+        var menubox = document.getElementById('MenuBox');
+        var menubtn = document.getElementById('MenuBtn');
+        var menupanel = document.getElementById('MenuPanel');
+
+        var before_x = menubox.offsetLeft
+        var before_y = menubox.offsetTop
+
+        var down_x = event.clientX
+        var down_y = event.clientY
+
+        document.onmousemove = function (e) {
+            // console.log(' \nmenubox.offsetTop = ', menubox.offsetTop);
+            // console.log(' menubox.offsetLeft = ', menubox.offsetLeft);
+            // console.log('\ne.clientX = ', e.clientX);
+            // console.log('e.clientY = ', e.clientY);
+
+            var move_x = e.clientX
+            var move_y = e.clientY
+
+            var new_x = move_x - down_x
+            var new_y = move_y - down_y
+
+            menubox.style.left = (before_x + new_x).toString() + 'px';
+            menubox.style.top = (before_y + new_y).toString() + 'px';
+        }
+
+        document.onmouseup = function () {
+            document.onmousemove = null;
+        }
+    }
+
+    // ==============================================================================
+    // ==============================================================================
+    // Phone
+    var menubox = document.querySelector('#MenuBox');
+    var menubtn = document.querySelector('#MenuBtn');
+    var MenuPanel = document.querySelector('#MenuPanel');
+    var maxAbleWidth = window.screen.width - 50;
+    var maxAbleHeight = window.screen.height - 50;
+    var phoneWTrans = 800;
+
+    menubtn.addEventListener('touchstart', function (e) {
+        if (window.screen.width < phoneWTrans) {
+            console.log('touchstart>>');
+
+            var event = e || window.event;
+            var touch = event.targetTouches[0];
+            objAbleLeft = touch.clientX - menubox.offsetLeft;
+            objAbleTop = touch.clientY - menubox.offsetTop;
+
+            document.addEventListener('touchmove', preventE, { passive: false });
+        }
+    });
+    menubtn.addEventListener('touchmove', function (e) {
+        if (window.screen.width < phoneWTrans) {
+            console.log('touchmove>>');
+
+            var event = e || window.event;
+            var touch = event.targetTouches[0];
+            var objtLeft = touch.clientX - objAbleLeft;
+            var objtTop = touch.clientY - objAbleTop;
+
+            if (objtLeft < 0) {
+                objtLeft = 0;
+            } else if (objtLeft >= maxAbleWidth) {
+                objtLeft = maxAbleWidth;
+            }
+            if (objtTop < 0) {
+                objtTop = 0;
+            } else if (objtTop >= maxAbleHeight) {
+                objtTop = maxAbleHeight;
+            }
+
+            menubox.style.left = objtLeft + 'px';
+            menubox.style.top = objtTop + 'px';
+
+        }
+    });
+
+
+    menubtn.addEventListener('touchend', function () {
+        if (window.screen.width < 500) {
+            document.removeEventListener('touchmove', preventE, { passive: false });
+        }
+    }, { passive: false });
+
+    function preventE(e) {
+        e.preventDefault();
+    }
+
+    // ==============================================================================
+    // ==============================================================================
+
+    function MenuGo(code) {
+        if (code == 'Go') {
+            var obj = document.getElementById('Go1');
+
+            if (obj.style.display == 'none') {
+                obj.style.display = 'block';
+            } else {
+                obj.style.display = 'none';
+            }
+        }
+    }
+
+    function Navigation(code) {
+
+        if (code == 'go1') {
+            window.history.go(1);
+        }
+        if (code == 'go2') {
+            window.history.go(-1);
+        }
+        if (code == 'go3') {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+        if (code == 'go4') {
+            document.body.scrollTop = document.body.scrollHeight / 2;
+            document.documentElement.scrollTop = document.body.scrollHeight / 2;
+        }
+        if (code == 'go5') {
+            document.body.scrollTop = document.body.scrollHeight;
+            document.documentElement.scrollTop = document.body.scrollHeight;
+        }
+        if (code == 'go6') {
+            window.location.reload();
+        }
+    }
+</script>
