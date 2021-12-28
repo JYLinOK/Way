@@ -8,6 +8,8 @@ from pathlib import Path
 from multiprocessing import Process, Queue
 
 
+
+
 # ============================================================================================================
 # ============================================================================================================
 # Load the config
@@ -312,6 +314,7 @@ def get_way_tags_set(html_path):
 
 
 # get sparated set of text
+# sparated_set = get_sparate_set(wr_content_origin, '"./', '\"', 0)
 def get_sparate_set(origin, start_sign, end_sign, item_index):
     if origin != '':
         start_sign_len = len(start_sign)
@@ -327,11 +330,11 @@ def get_sparate_set(origin, start_sign, end_sign, item_index):
 
         try:
             for char_i in origin:
-                if char_i == start_sign[0]:
+                if char_i == start_sign[0] or char_i == "\'":
                     s_sign = origin[start_index: start_index + 3]
                     # print('start_sign = ', start_sign)
 
-                    if s_sign == start_sign:
+                    if s_sign == start_sign or s_sign == "'./":
                         rest_origin = origin[start_index+1:]
                         # print('rest_origin = ', rest_origin)
 
@@ -339,7 +342,7 @@ def get_sparate_set(origin, start_sign, end_sign, item_index):
                         for i_rest in rest_origin:
                             # print(i_rest)
 
-                            if i_rest == end_sign:
+                            if i_rest == end_sign or i_rest == "\'":
                                 # print(i_rest)
 
                                 sparated = origin[start_index+1:start_index+len_index+1]
@@ -515,14 +518,14 @@ def get_html_add_segments(html_path, way_tag_set):
     html_add_segments = []
     way_tag_end_index = 0
     sum_way_tag_index = 0
-    way_tag_set_len = len(way_tag_set)
     seg_origin = ''
 
     # print('>> get_html_add_segments()')
     # print('html_path = ', html_path, '\n')
     # print('way_tag_set = ', way_tag_set, '\n')
 
-    if way_tag_set_len > 0:
+    if way_tag_set:
+        way_tag_set_len = len(way_tag_set)
         for way_tag in way_tag_set:
             sum_way_tag_index += 1
             if way_tag_set_len - sum_way_tag_index >= 0:
