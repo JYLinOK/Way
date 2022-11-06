@@ -32,6 +32,26 @@ def segs_list(txt:str):
 
 
 # ________________________________________________________________________________________________________
+def get_rest_segs_list(segs_list:list):
+    """
+    Get the rest segment coordinates tuple list from a segments coordinates tuple list orderly
+    """
+    rest_segs_list = []
+    len_segs_list = len(segs_list)
+    for i in range(len_segs_list):
+        if i == 0 and segs_list[0][0] != 0:
+            rest_segs_list.append((0, segs_list[0][0]-1))
+        elif i == len_segs_list-1 and segs_list[-1][1] != len_segs_list:
+            rest_segs_list.append((segs_list[-2][1]+1, segs_list[-1][0]-1))
+            rest_segs_list.append((segs_list[-1][1]+1, len(txt)))
+        else:
+            rest_segs_list.append((segs_list[i-1][1]+1, segs_list[i][0]-1))
+
+    return rest_segs_list
+
+
+
+# ________________________________________________________________________________________________________
 def insert_segs_in_file(segs_dict:dict, file_path:str):
     """
     Insert segments list items in a file that has way-tag 
@@ -45,25 +65,14 @@ def insert_segs_in_file(segs_dict:dict, file_path:str):
     print(f'{len(txt) = }')
     
     new_str = ''
-    segs_split_list = []
+    segs_list = []
     for it in f_segs_list:
-        segs_split_list.append(it[0])
+        segs_list.append(it[0])
 
-    print(f'{segs_split_list = }')
+    print(f'{segs_list = }')
 
-    rest_son_strs_list = []
-    len_segs_split_list = len(segs_split_list)
-    for i in range(len_segs_split_list):
-        if i == 0 and segs_split_list[0][0] != 0:
-            rest_son_strs_list.append((0, segs_split_list[0][0]-1))
-        elif i == len_segs_split_list-1 and segs_split_list[-1][1] != len_segs_split_list:
-            rest_son_strs_list.append((segs_split_list[-2][1]+1, segs_split_list[-1][0]-1))
-            rest_son_strs_list.append((segs_split_list[-1][1]+1, len(txt)))
-        else:
-            rest_son_strs_list.append((segs_split_list[i-1][1]+1, segs_split_list[i][0]-1))
+  
 
-
-    print(f'{rest_son_strs_list = }')
 
 
 
