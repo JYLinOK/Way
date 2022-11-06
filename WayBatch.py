@@ -5,24 +5,15 @@ import re
 
 
 
-def segments_dict(file_path):
+def segments_list(file_path):
     file_txt = jtc.read_file(file_path)
     find_list = []
-
-    file_txt2 = file_txt
-
     pattern = re.compile(r'{{\s*(way\S*)\s*:\s*(\S+)\s*}}')
-
     finish = False
     ind = 0
     while not finish:
         mat = pattern.search(file_txt)
         if mat != None:
-            # print()
-            # print(f'{mat = }')
-            # print(f'{mat.span() = }')
-            # print(f'{mat.group() = }')
-            # print(f'{mat.groups() = }')
             if ind == 0:
                 find_list.append([mat.span(), mat.groups()])
             else:
@@ -35,16 +26,9 @@ def segments_dict(file_path):
         else:
             finish = True
 
-    print(f'{file_txt2[168:178] = }')
-    print(f'{file_txt2[291:307] = }')
-    print(f'{find_list = }')
-
-
-
-
 
 
 file_path = './index3.html'
-segments_dict(file_path)
+segments_list(file_path)
 
 
