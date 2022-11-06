@@ -27,7 +27,7 @@ def segs_list(txt:str):
             ind += 1
         else:
             finish = True
-    return find_list, txt
+    return find_list
 
 
 
