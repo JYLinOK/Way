@@ -6,17 +6,26 @@ import re
 
 
 def segments_dict(file_path):
-    file = jtc.read_file(file_path)
-    print(file)
+    file_txt = jtc.read_file(file_path)
+    # # print(f'{file_txt = }')
+    # segs_list = re.findall(r'{{\s*(way\S*)\s*:\s*(\S+)\s*}}', file_txt)
+    # # print(f'{segs_list = }')
+    # print(f'{segs_list = }')
+
+    print(f'{file_txt[168:178] = }')
+
+    pattern = re.compile(r'{{\s*(way\S*)\s*:\s*(\S+)\s*}}')
+    mat = pattern.search(file_txt)
+    print(f'{mat = }')
+    print(f'{mat.span() = }')
+    print(f'{mat.group() = }')
+    print(f'{mat.groups() = }')
 
 
 
-# print(re.match('ydook', 'www.ydook.com').span())  
-# print(re.match('com', 'www.ydook.com'))         
-
-result = re.findall(r'(\w+)=(\d+)', 'set width=20 and height=10')
-print(result)
 
 
-result = re.findall(r'{{\s*(way\S*)\s*:\s*(\S+)\s*}}', 'set width=20 {{way: 123 }} and the {{   way : abas }} height=10')
-print(result)
+file_path = './index3.html'
+segments_dict(file_path)
+
+
