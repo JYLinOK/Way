@@ -6,7 +6,7 @@
     "html_edit_path": "./htmledit",
     "welcome_path": "./welcome.txt",
     "html_build_path": "./htmlbuild",
-    "home_index_html": "./htmlbuild/ydook.html",
+    "home_index_html": "./htmlbuild/index.html",
     "way_router_path": "./wayrouter",
     "browser_exe_path": "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chrome.exe",
     "auto_generate_seed": 1,
