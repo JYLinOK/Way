@@ -32,7 +32,7 @@ def segs_list(txt:str):
 
 
 # ________________________________________________________________________________________________________
-def get_rest_segs_list(segs_list:list):
+def get_rest_segs_list(segs_list:list, len_txt:int):
     """
     Get the rest segment coordinates tuple list from a segments coordinates tuple list orderly
     """
@@ -43,7 +43,7 @@ def get_rest_segs_list(segs_list:list):
             rest_segs_list.append((0, segs_list[0][0]-1))
         elif i == len_segs_list-1 and segs_list[-1][1] != len_segs_list:
             rest_segs_list.append((segs_list[-2][1]+1, segs_list[-1][0]-1))
-            rest_segs_list.append((segs_list[-1][1]+1, len(txt)))
+            rest_segs_list.append((segs_list[-1][1]+1, len_txt))
         else:
             rest_segs_list.append((segs_list[i-1][1]+1, segs_list[i][0]-1))
 
@@ -65,11 +65,16 @@ def insert_segs_in_file(segs_dict:dict, file_path:str):
     print(f'{len(txt) = }')
     
     new_str = ''
-    segs_list = []
+    segs_l = []
     for it in f_segs_list:
-        segs_list.append(it[0])
+        segs_l.append(it[0])
 
-    print(f'{segs_list = }')
+    print(f'{segs_l = }')
+
+    rest_segs_l = get_rest_segs_list(segs_l, len(txt))
+    print(f'{rest_segs_l = }')
+
+    
 
   
 
