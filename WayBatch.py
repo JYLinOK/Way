@@ -54,7 +54,7 @@ def get_rest_segs_list(segs_list:list, len_txt:int):
 # ________________________________________________________________________________________________________
 def insert_segs_in_file(segs_dict:dict, file_path:str):
     """
-    Insert segments list items in a file that has way-tag 
+    Insert segments list items in a file that has way-tag, rewrite the original file
     """
     
     txt = jtc.read_file(file_path)
@@ -63,19 +63,7 @@ def insert_segs_in_file(segs_dict:dict, file_path:str):
     for it in f_segs_list:
         segs_l.append(it[0])
 
-    print(f'\n{segs_l = }')
-
     rest_segs_l = get_rest_segs_list(segs_l, len(txt))
-
-    print(f'\n{txt[14:14] = }')
-    
-
-    print(f'\n{rest_segs_l = }')
-
-    
-    a = 1
-    print(f'\n{txt[rest_segs_l[a][0]:rest_segs_l[a][1]] = }')
-
 
     segs_l_class = []
     for it in segs_l:
@@ -100,19 +88,9 @@ def insert_segs_in_file(segs_dict:dict, file_path:str):
                             insert_str = segs_dict[it[1][1]]
                     new_str += insert_str
 
-                print(f'\n{new_str = }')
+                # print(f'\n{new_str = }')
                 min_start = seg[1][1]
         
-    
-
-
-
-
-
-
-
-
-            
     jtc.write_file('./index_new.html', new_str)
 
 
@@ -124,17 +102,5 @@ def insert_segs_in_file(segs_dict:dict, file_path:str):
 
 
 
-
-
-
-file_path = './index3.html'
-segs_dict = {
-    'a': 'a_a',
-    'abc123': 'abc123',
-}
-
-
-
-find_list = insert_segs_in_file(segs_dict, file_path)
 
 
