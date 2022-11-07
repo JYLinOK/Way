@@ -1,63 +1,22 @@
 import os
-import json
 import time
 import shutil
-import hashlib
 import webbrowser
 from pathlib import Path
 from multiprocessing import Process, Queue
 
+
+from wayconfig import wayconfig
 
 
 
 # ============================================================================================================
 # ============================================================================================================
 # Load the config
-with open('./wayconfig.json', 'r',  encoding='UTF-8') as config_f:
-    config_f_read = config_f.read()
-    config_f_read_json = json.loads(config_f_read)
-
-# Set html way path
-html_way_path = config_f_read_json['html_way_path']
-
-# Set html origin path
-html_edit_path = config_f_read_json['html_edit_path']
-
-# Set html html build path
-html_build_path = config_f_read_json['html_build_path']
-
-# Get the edit mode
-auto_generate_seed = config_f_read_json['auto_generate_seed']
-auto_scaner_seed = config_f_read_json['auto_scaner_seed']
-
-# Get the browser path
-browser_exe_path = config_f_read_json['browser_exe_path']
+home_index_html = os.getcwd() + '/' + wayconfig['home_index_html']
 
 # Get tag name list
-home_index_html = os.getcwd() + '/' + config_f_read_json['home_index_html']
-
-# Get tag name list
-tag_name_list = os.listdir(html_way_path)
-
-# Get welcome context
-way_router_path = config_f_read_json['way_router_path']
-
-# Get auto restart
-auto_restart = config_f_read_json['auto_restart']
-
-# Get way_announce
-way_announce = config_f_read_json['way_announce']
-way_announce_str = "<script>console.log('\\\A/ Hi, Way! - An easy and fast front-end generator framework.');</script>"
-
-# Get welcome context
-welcome_path = config_f_read_json['welcome_path']
-welcome_context = config_f_read_json['welcome_context']
-
-# Get auto restart speed
-auto_restart_seed = config_f_read_json['auto_restart_seed']
-
-# Define welcome text show only one time
-welcome_got = False
+tag_name_list = os.listdir(wayconfig['html_way_path'])
 
 
 
@@ -66,24 +25,23 @@ welcome_got = False
 # ============================================================================================================
 # Set welcome
 def welcome_show():
-    global welcome_got
-    if not welcome_got:
-        if welcome_context:
+    if not wayconfig['welcome_got']:
+        if wayconfig['welcome_context']:
             print('_____________________________________________________________________________')
             print(' Way.py: founded by Jinwei Lin: an easy and fast front-end generator library.')
             print('_____________________________________________________________________________')
 
-            with open(welcome_path, 'r',  encoding='UTF-8') as welcome_f:
+            with open(wayconfig['welcome_path'], 'r',  encoding='UTF-8') as welcome_f:
                 print(welcome_f.read())
             # print time
             print('______________________________________________________________________________')
             print('>> Way: Run Time:', time.strftime( "%a %b,%d %H:%M:%S %Y", time.localtime()), '\n')
-            welcome_got = True
+            wayconfig['welcome_got'] = True
 
 # Auto-restart 
 def auto_restart():
-    if auto_restart:
-        time.sleep(auto_restart_seed)
+    if wayconfig['auto_restart']:
+        time.sleep(wayconfig['auto_restart_seed'])
         os.system('python Way.py')
         print('>> Way: Restarted')
 
@@ -123,8 +81,8 @@ def get_all_items(now_dir, dir_set, file_set):
 # Get now lists
 def get_now_lists():
     # Get files and paths lists between editing and building
-    all_edit_path_item = get_all_items(html_edit_path, [], [])
-    all_way_path_item = get_all_items(html_way_path, [], [])
+    all_edit_path_item = get_all_items(wayconfig['html_edit_path'], [], [])
+    all_way_path_item = get_all_items(wayconfig['html_way_path'], [], [])
 
     # initialize lists
     now_html_list = []
@@ -197,7 +155,7 @@ def now_update_scander(a_dir, edit_path):
                 # if item_name is a dir name
                 extend_list = ['.html']
                 if not if_is_file(now_dir_scanning)[0]:
-                    build_dir_path = html_build_path + now_dir_scanning[len(edit_path):]
+                    build_dir_path = wayconfig['html_build_path'] + now_dir_scanning[len(edit_path):]
                     # print('not file: build_dir_path = ', build_dir_path,'\n')
 
                     if not os.path.exists(build_dir_path):
@@ -208,7 +166,7 @@ def now_update_scander(a_dir, edit_path):
 
                 # if item_name is a file name
                 elif not if_end_with_extend_list(item_name, extend_list):
-                    build_file_path = html_build_path + now_dir_scanning[len(edit_path):]
+                    build_file_path = wayconfig['html_build_path'] + now_dir_scanning[len(edit_path):]
                     # print('is file: build_dir_path = ', build_file_path,'\n')
 
                     # rewrite and create other formats but html files  
@@ -225,7 +183,7 @@ def write_files(file_path, file_str):
         try:
             write_files(file_path, file_str)
         except IOError:
-            auto_restart()
+            wayconfig['auto_restart']()
 
 
 # Read file
@@ -240,7 +198,7 @@ def read_files(file_path):
             try:
                 read_files(file_path)
             except IOError:
-                auto_restart()
+                wayconfig['auto_restart']()
 
 
 # Get id context
@@ -281,7 +239,7 @@ def get_wr_context(tag):
 def get_way_tags_set(html_path):
     if Path(html_path).is_file():    
         way_tags_set = []
-        # with open(html_edit_path + '/' + html_path, 'r+', encoding='UTF-8') as fr:
+        # with open(wayconfig['html_edit_path'] + '/' + html_path, 'r+', encoding='UTF-8') as fr:
         try:
             with open(html_path, 'r', encoding='UTF-8') as fr:
                 # Get the file content
@@ -327,7 +285,7 @@ def get_way_tags_set(html_path):
             try:
                 get_way_tags_set(html_path)
             except IOError:
-                auto_restart()
+                wayconfig['auto_restart']()
 
 
 # get sparated set of text
@@ -384,7 +342,7 @@ def get_sparate_set(origin, start_sign, end_sign, item_index):
             try:
                 get_sparate_set(origin, start_sign, end_sign, item_index)
             except IOError:
-                auto_restart()
+                wayconfig['auto_restart']()
 
 
 # get the segments of text by known sparated segments list
@@ -456,10 +414,10 @@ def change_connect(origin, embody, html_path):
 
 
 # get changed wayrouter content
-def get_wayrouted_content(way_path, html_path, way_router_path):
+def get_wayrouted_content(way_path, html_path, wayconfig):
 
     # print('html_path = ',  html_path)
-    # print('way_router_path = ',  way_router_path)
+    # print('wayconfig['way_router_path'] = ',  wayconfig['way_router_path'])
     
     wr_content_origin = read_files(way_path)
     # print('wr_content_origin = ',  wr_content_origin)
@@ -482,12 +440,12 @@ def get_wayrouted_content(way_path, html_path, way_router_path):
 
 
 # get the way segment content by way name
-def get_way_content(way_name, way_class, html_path, html_way_path):
+def get_way_content(way_name, way_class, html_path, wayconfig):
    
     # Handle the pure way 
     if way_class == 'id':
-        all_way_path_item = get_all_items(html_way_path, [], [])
-        way_path = html_way_path + '/' + way_name + '.html'
+        all_way_path_item = get_all_items(wayconfig['html_way_path'], [], [])
+        way_path = wayconfig['html_way_path'] + '/' + way_name + '.html'
 
         # print('way_path = ', way_path, '\n')
         # print('all_way_path_item[1] = ', all_way_path_item[1], '\n')
@@ -506,8 +464,8 @@ def get_way_content(way_name, way_class, html_path, html_way_path):
     
     # Handle the way router
     elif way_class == 'wr':
-        all_wayrouter_path = get_all_items(way_router_path, [], [])
-        way_path = way_router_path + '/' + way_name + '.html'
+        all_wayrouter_path = get_all_items(wayconfig['way_router_path'], [], [])
+        way_path = wayconfig['way_router_path'] + '/' + way_name + '.html'
         
         # print('html_path = ', html_path)
         # print('way_path = ', way_path, '\n')
@@ -522,14 +480,14 @@ def get_way_content(way_name, way_class, html_path, html_way_path):
                 flag_true_return = True
 
                 # return read_files(way_path)
-                return get_wayrouted_content(way_path, html_path, way_router_path)
+                return get_wayrouted_content(way_path, html_path, wayconfig)
 
         if not flag_true_return:
             return None
 
 
 # get the combined string of original html ans way segments
-def get_html_add_segments(html_path, way_tag_set):
+def get_html_add_segments(html_path, way_tag_set, wayconfig):
     # Update to new html in html build
     f_read = read_files(html_path)
     html_add_segments = []
@@ -551,7 +509,7 @@ def get_html_add_segments(html_path, way_tag_set):
                 elif way_tag[1] > 0:
                     seg_origin = f_read[way_tag_end_index:way_tag[1]]
                 
-                seg_way_content = get_way_content(way_tag[0], way_tag[3], html_path, html_way_path)
+                seg_way_content = get_way_content(way_tag[0], way_tag[3], html_path, wayconfig)
                 # print('seg_way_content = ', seg_way_content, '\n')
 
                 way_tag_end_index = way_tag[2]
@@ -569,12 +527,12 @@ def get_list_str_in_all(list_name):
     
     # print('>> get_list_str_in_all')
     # print('list_name = ', list_name)
-    if way_announce:
+    if wayconfig['way_announce']:
         all_str = ''
         for s in list_name:
             if s != None:
                 if '</html>' in s:
-                    all_str = all_str + way_announce_str + s 
+                    all_str = all_str + wayconfig['way_announce_str'] + s 
                 else: all_str += s
         return all_str 
     
@@ -593,19 +551,19 @@ def get_list_str_in_all_wayrouter(list_name):
 # Delete the extra files in building folder
 def delete_extra_files():
     # Get files and paths lists between editing and building
-    all_edit_path_item = get_all_items(html_edit_path, [], [])
-    all_build_path_item = get_all_items(html_build_path, [], [])
+    all_edit_path_item = get_all_items(wayconfig['html_edit_path'], [], [])
+    all_build_path_item = get_all_items(wayconfig['html_build_path'], [], [])
 
     # print('all_edit_path_item = ', all_edit_path_item)
     # print()
     # print('all_build_path_item = ', all_build_path_item)
     # print()
 
-    len_build = len(html_build_path)
+    len_build = len(wayconfig['html_build_path'])
 
     # delete excess files
     for f_built_file in all_build_path_item[1]:
-        f_built_2_edit = html_edit_path + f_built_file[len_build:]
+        f_built_2_edit = wayconfig['html_edit_path'] + f_built_file[len_build:]
 
         if f_built_2_edit not in all_edit_path_item[1]:
             # print('file ========>', f_built_2_edit, ' not in all_edit_path_item\n')
@@ -617,12 +575,12 @@ def delete_extra_files():
                     try:
                         os.remove(f_built_file)
                     except IOError:
-                        auto_restart()
+                        wayconfig['auto_restart']()
     
         
     # delete excess dirs
     for f_built_dir in all_build_path_item[0]:
-        f_built_2_edit = html_edit_path + f_built_dir[len_build:]
+        f_built_2_edit = wayconfig['html_edit_path'] + f_built_dir[len_build:]
         # print('f_built_2_edit = ', f_built_2_edit)
 
         if f_built_2_edit not in all_edit_path_item[0]:
@@ -643,19 +601,19 @@ def delete_extra_files():
 
             
 # Define way to handle html file
-def way_html():
+def way_html(wayconfig):
     now_html_list = get_now_lists()[0]
-    edit_path_len = len(html_edit_path)
+    edit_path_len = len(wayconfig['html_edit_path'])
 
     # print('now_html_list = ', now_html_list)
     try:
         for html_path in now_html_list:
-            html_path_to_build = html_build_path + html_path[edit_path_len:]
+            html_path_to_build = wayconfig['html_build_path'] + html_path[edit_path_len:]
 
             way_tag_set = get_way_tags_set(html_path)
             # print('way_tag_set = ', way_tag_set)
 
-            html_add_way_segments = get_html_add_segments(html_path, way_tag_set)
+            html_add_way_segments = get_html_add_segments(html_path, way_tag_set, wayconfig)
             # print('html_add_way_segments = ', html_add_way_segments)
             # print('get_list_str_in_all(html_add_way_segments) = ', get_list_str_in_all(html_add_way_segments))
 
@@ -664,9 +622,9 @@ def way_html():
     except IOError:
         print('IOError: way_html error!')
         try:
-            way_html()
+            way_html(wayconfig)
         except IOError:
-            auto_restart()
+            wayconfig['auto_restart']()
 
 
 
@@ -677,7 +635,7 @@ def way_html():
 def run_browser():
     # Get specified browser location 
     index_url = home_index_html
-    browser_path = browser_exe_path
+    browser_path = wayconfig['browser_exe_path']
 
     try:
         # Run specified browser
@@ -693,17 +651,17 @@ def run_browser():
         try:
             run_browser()
         except IOError:
-            auto_restart()
+            wayconfig['auto_restart']()
 
 
 # Way monitor for file individual update
 def way_update_structure(q):
     try:
         while True:
-            now_update_scander(html_edit_path, html_edit_path)
+            now_update_scander(wayconfig['html_edit_path'], wayconfig['html_edit_path'])
             delete_extra_files()
             q.put('structure')
-            time.sleep(auto_scaner_seed)
+            time.sleep(wayconfig['auto_scaner_seed'])
           
     except IOError:
         print('IOError: way_update_structure error!')
@@ -715,7 +673,7 @@ def way_update_structure(q):
 
 
 # Way monitor for file content update
-def way_update_keyfiles(q):
+def way_update_keyfiles(q, wayconfig):
     # print('q.get() = ', q.get())
 
     try:
@@ -724,8 +682,8 @@ def way_update_keyfiles(q):
             if q.get() == 'structure':
                 # print('q.get() = ', q.get())
                 # print('q.empty() = ', q.empty(), '\n')
-                way_html()
-                time.sleep(auto_generate_seed)
+                way_html(wayconfig)
+                time.sleep(wayconfig['auto_generate_seed'])
         
     except IOError:
         print('IOError: way_update_keyfiles error!')
@@ -738,7 +696,7 @@ def way_update_keyfiles(q):
 
 
 # ________________________________________________________________________________________________________
-def simple_run():
+def simple_run(wayconfig):
     """
     Quickly run the Way
     """
@@ -748,7 +706,7 @@ def simple_run():
     # Set Queue
     q = Queue()
     q_structure = Process(target=way_update_structure, args=(q,))
-    q_keyfiles = Process(target=way_update_keyfiles, args=(q,))
+    q_keyfiles = Process(target=way_update_keyfiles, args=(q, wayconfig))
 
     # Start Process
     q_structure.start()
@@ -766,7 +724,7 @@ def simple_run():
 # ============================================================================================================
 # Main RUN WAY
 if __name__ == "__main__":
-    simple_run()
+    simple_run(wayconfig)
 
     pass
     
