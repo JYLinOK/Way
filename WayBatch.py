@@ -42,8 +42,8 @@ def get_rest_segs_list(segs_list:list, len_txt:int):
         if i == 0 and segs_list[0][0] != 0:
             rest_segs_list.append((0, segs_list[0][0]))
         elif i == len_segs_list-1 and segs_list[-1][1] != len_txt:
-            rest_segs_list.append((segs_list[-2][1]+1, segs_list[-1][0]-1))
-            rest_segs_list.append((segs_list[-1][1]+1, len_txt))
+            rest_segs_list.append((segs_list[-2][1], segs_list[-1][0]))
+            rest_segs_list.append((segs_list[-1][1], len_txt))
         else:
             rest_segs_list.append((segs_list[i-1][1]+1, segs_list[i][0]+1))
 
@@ -64,8 +64,8 @@ def insert_segs_in_file(segs_dict:dict, file_path:str):
     print(f'{f_segs_list = }')
     print(f'{len(txt) = }')
 
-    # a = 1
-    # print(f'{txt[f_segs_list[a][0][0]:f_segs_list[a][0][1]] = }')
+    a = 0
+    print(f'\n{txt[f_segs_list[a][0][0]:f_segs_list[a][0][1]] = }')
     
     segs_l = []
     for it in f_segs_list:
@@ -74,9 +74,8 @@ def insert_segs_in_file(segs_dict:dict, file_path:str):
     rest_segs_l = get_rest_segs_list(segs_l, len(txt))
     print(f'{rest_segs_l = }')
 
-    a = 1
+    a = 2
     print(f'\n{txt[rest_segs_l[a][0]:rest_segs_l[a][1]] = }')
-
 
     segs_l_class = []
     for it in segs_l:
@@ -98,7 +97,7 @@ def insert_segs_in_file(segs_dict:dict, file_path:str):
         for seg in all_segs_list:
             if seg[1][0] == min_start:
                 if seg[0] == 'origin':
-                    new_str += txt[seg[1][0]:seg[1][1]+1]
+                    new_str += txt[seg[1][0]:seg[1][1]]
                 elif seg[0] == 'insert':
                     for it in f_segs_list:
                         if it[0] == seg[1]:
@@ -107,7 +106,7 @@ def insert_segs_in_file(segs_dict:dict, file_path:str):
 
                 print(f'\n{new_str = }')
 
-                min_start = seg[1][1] + 1
+                min_start = seg[1][1]
         
     
 
