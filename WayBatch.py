@@ -102,15 +102,19 @@ def batch_files(segs_dict:dict, template_f_path:str, save_dir:str):
     Example:
 
     dir_path = './gen_dir/'
+
     segs_dict = {
-        'f1.html':{
+        'f1.extension':{
             'tag_id_1': 'content_1',
             'tag_id_2': 'content_2',
+            ...
         },
-        'f2.html':{
+        'f2.extension':{
             'tag_id_1': 'content_3',
             'tag_id_2': 'content_4',
+            ...
         },
+        ...
     }
     """
     jtc.if_path_not_exist_create(save_dir)
@@ -120,7 +124,29 @@ def batch_files(segs_dict:dict, template_f_path:str, save_dir:str):
 
 
 
+# ________________________________________________________________________________________________________
+def batch_files_by_pathes(segs_dict:dict, template_f_path:str, save_dir:str):
+    """
+    Generate batch files with special segs_dict one by one, read the files from file pathes as insert contents
 
+    Example:
+
+    dir_path = './gen_dir/'
+    
+    segs_dict = {
+        'f1.extension':{
+            'tag_id_1': 'file_path_1',
+            'tag_id_2': 'file_path_2',
+            ...
+        },
+        'f2.extension':{
+            'tag_id_1': 'file_path_3',
+            'tag_id_2': 'file_path_4',
+            ...
+        },
+        ...
+    }
+    """
 
 
 
