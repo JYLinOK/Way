@@ -1,5 +1,5 @@
-# import jtc
-import jtc.jtc as jtc
+import jtc
+# import jtc.jtc as jtc
 import re
 
 
@@ -94,23 +94,23 @@ def insert_segs_in_file(segs_dict:dict, origin_f_path:str, new_f_path:str):
 
 
 # ________________________________________________________________________________________________________
-def batch_files(segs_dict:dict, template_f_path:str, save_dir:str):
+def batch_files_strs(segs_dict:dict, template_f_path:str, save_dir:str):
     """
-    Generate batch files with special segs_dict one by one
+    Generate batch files with special segs_dict one by one, inster str contents
 
     Example:
 
-    dir_path = './gen_dir/'
+    save_dir = './gen_dir/'
 
     segs_dict = {
         'f1.extension':{
-            'tag_id_1': 'content_1',
-            'tag_id_2': 'content_2',
+            'tag_id_1': 'str_content_1',
+            'tag_id_2': 'str_content_2',
             ...
         },
         'f2.extension':{
-            'tag_id_1': 'content_3',
-            'tag_id_2': 'content_4',
+            'tag_id_1': 'str_content_3',
+            'tag_id_2': 'str_content_4',
             ...
         },
         ...
@@ -124,30 +124,49 @@ def batch_files(segs_dict:dict, template_f_path:str, save_dir:str):
 
 
 # ________________________________________________________________________________________________________
-def batch_files_by_pathes(segs_dict:dict, template_f_path:str, save_dir:str):
+def batch_files(segs_dict:dict, template_f_path:str, save_dir:str):
     """
-    Generate batch files with special segs_dict one by one, read the files from file pathes as insert contents
+    Generate batch files with special segs_dict one by one, if file_path is file path, insert the content of the file, else insert str
 
     Example:
 
-    dir_path = './gen_dir/'
+    save_dir = './gen_dir/'
     
     segs_dict = {
         'f1.extension':{
-            'tag_id_1': 'file_path_1',
-            'tag_id_2': 'file_path_2',
+            'tag_id_1': 'file_path_1 or str_content_1',
+            'tag_id_2': 'file_path_2 or str_content_2',
             ...
         },
         'f2.extension':{
-            'tag_id_1': 'file_path_3',
-            'tag_id_2': 'file_path_4',
+            'tag_id_1': 'file_path_3 or str_content_3',
+            'tag_id_2': 'file_path_4 or str_content_4',
             ...
         },
         ...
     }
     """
 
+    for it_exten in segs_dict:
+        for tag_id in segs_dict[it_exten]:
+            if jtc.if_path_or_file_exist(segs_dict[it_exten][tag_id]):
+                segs_dict[it_exten][tag_id] = jtc.read_file(segs_dict[it_exten][tag_id])
+
+    # print(f'{segs_dict = }')
+    batch_files_strs(segs_dict, template_f_path, save_dir)
 
 
+segs_dict = {
+    'f1.html':{
+        'a': './insert_files/123.txt',
+        'b': './insert_files/abc.html',
+    },
+    'f2.html':{
+        'a': './insert_files/123.txt',
+        'b': './insert_files/abc.html',
+    },
+}
 
+dir_path = './gen_dir/'
+batch_files(segs_dict, './index3.html', dir_path)
 
