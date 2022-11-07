@@ -151,6 +151,9 @@ def batch_files(segs_dict:dict, template_f_path:str, save_dir:str):
         },
         ...
     }
+
+    f1.extension, f2.extension ... are the names of the batch files that will be generated
+    file_path_1 or str_content_1 ... are the name of the inserted files or strs that will be inserted
     """
 
     for it_exten in segs_dict:
