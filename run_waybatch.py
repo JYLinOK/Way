@@ -5,7 +5,7 @@ usage: This is a simple example of using the WayBatch.
 note: If you want to use WayBath in Way editing, set save_dir as ./htmledit/.. 
 """
 
-import WayBatch as wb
+import Way.WayBatch as wb
 
 
 

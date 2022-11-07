@@ -7,7 +7,7 @@ usage: This is simple run file to run Way.
 
 import os
 
-os.system("python Way.py")
+os.system("python Way/Way.py")
 
 
 
