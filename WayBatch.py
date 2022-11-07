@@ -45,7 +45,7 @@ def get_rest_segs_list(segs_list:list, len_txt:int):
             rest_segs_list.append((segs_list[-2][1], segs_list[-1][0]))
             rest_segs_list.append((segs_list[-1][1], len_txt))
         else:
-            rest_segs_list.append((segs_list[i-1][1]+1, segs_list[i][0]+1))
+            rest_segs_list.append((segs_list[i-1][1], segs_list[i][0]))
 
     return rest_segs_list
 
@@ -59,40 +59,36 @@ def insert_segs_in_file(segs_dict:dict, file_path:str):
     
     txt = jtc.read_file(file_path)
     f_segs_list = segs_list(txt)
-
-    print(f'{segs_dict = }')
-    print(f'{f_segs_list = }')
-    print(f'{len(txt) = }')
-
-    a = 0
-    print(f'\n{txt[f_segs_list[a][0][0]:f_segs_list[a][0][1]] = }')
-    
     segs_l = []
     for it in f_segs_list:
         segs_l.append(it[0])
 
-    rest_segs_l = get_rest_segs_list(segs_l, len(txt))
-    print(f'{rest_segs_l = }')
+    print(f'\n{segs_l = }')
 
-    a = 2
+    rest_segs_l = get_rest_segs_list(segs_l, len(txt))
+
+    print(f'\n{txt[14:14] = }')
+    
+
+    print(f'\n{rest_segs_l = }')
+
+    
+    a = 1
     print(f'\n{txt[rest_segs_l[a][0]:rest_segs_l[a][1]] = }')
+
 
     segs_l_class = []
     for it in segs_l:
         segs_l_class.append(['insert', it])
-    print(f'\n{segs_l_class = }')
 
     rest_segs_l_class = []
     for it in rest_segs_l:
         rest_segs_l_class.append(['origin', it])
-    print(f'{rest_segs_l_class = }')
 
     all_segs_list = rest_segs_l_class + segs_l_class
-    print(f'{all_segs_list = }')
 
     new_str = ''
     min_start = 0
-
     for i in range(len(all_segs_list)):
         for seg in all_segs_list:
             if seg[1][0] == min_start:
@@ -105,10 +101,13 @@ def insert_segs_in_file(segs_dict:dict, file_path:str):
                     new_str += insert_str
 
                 print(f'\n{new_str = }')
-
                 min_start = seg[1][1]
         
     
+
+
+
+
 
 
 
@@ -130,7 +129,7 @@ def insert_segs_in_file(segs_dict:dict, file_path:str):
 
 file_path = './index3.html'
 segs_dict = {
-    'a': 'aa',
+    'a': 'a_a',
     'abc123': 'abc123',
 }
 
