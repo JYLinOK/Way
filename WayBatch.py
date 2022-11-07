@@ -1,5 +1,11 @@
-import jtc
-# import jtc.jtc as jtc
+"""
+author: Jinwei Lin
+time: 2022/11/06
+note: remote: import jtc, local: import jtc.jtc as jtc
+"""
+
+# import jtc
+import jtc.jtc as jtc
 import re
 
 
