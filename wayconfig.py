@@ -64,12 +64,12 @@ wayconfig =  {
     "way_announce": True,
     "welcome_context": True,
     "welcome_got": False,
-    "html_way_path": "./htmlway",
-    "html_edit_path": "./htmledit",
+    "html_way_path": "./html3_way",
+    "html_edit_path": "./html2_edit",
     "welcome_path": "./welcome.txt",
-    "html_build_path": "./htmlbuild",
-    "home_index_html": "./htmlbuild/index.html",
-    "way_router_path": "./wayrouter",
+    "html_build_path": "./html1_build",
+    "home_index_html": "./html1_build/index.html",
+    "way_router_path": "./html4_router",
     "way_announce_str": "<script>console.log('\\\A/ Hi, Way! - An easy and fast front-end generator framework.');</script>",
     "browser_exe_path": "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chrome.exe",
     "auto_restart_seed": 1,
@@ -77,5 +77,6 @@ wayconfig =  {
     "auto_scaner_seed": 1,
     "way_write_file_formats": ['.html'],
     "copy_file_formats": copy_file_formats,
+    # ""
 }
 
