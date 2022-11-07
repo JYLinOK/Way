@@ -87,7 +87,6 @@ def insert_segs_in_file(segs_dict:dict, origin_f_path:str, new_f_path:str):
                         if it[0] == seg[1]:
                             insert_str = segs_dict[it[1][1]]
                     new_str += insert_str
-
                 # print(f'\n{new_str = }')
                 min_start = seg[1][1]
         
@@ -96,13 +95,14 @@ def insert_segs_in_file(segs_dict:dict, origin_f_path:str, new_f_path:str):
 
 
 # ________________________________________________________________________________________________________
-def batch_files(segs_dict:dict, template_path:str, save_dir:str):
+def batch_files(segs_dict:dict, template_f_path:str, save_dir:str):
     """
     Generate batch files with special segs_dict one by one
     """
     jtc.if_path_not_exist_create(save_dir)
 
-
+    for it in segs_dict:
+        insert_segs_in_file(segs_dict[it], template_f_path, save_dir + '/' + it)
 
 
 
@@ -110,17 +110,17 @@ def batch_files(segs_dict:dict, template_path:str, save_dir:str):
 
 dir_path = './gen_dir/'
 segs_dict = {
-    'f1':{
-        'a': 'a_a',
-        'abc123': 'abc123',
+    'f1.html':{
+        'a': 'a_a 88999',
+        'abc123': 'abc123123456789',
     },
-    'f2':{
+    'f2.html':{
         'a': 'a_a',
         'abc123': 'abc123',
     },
 }
 
 
-find_list = batch_files(segs_dict, dir_path)
+batch_files(segs_dict, './index3.html', dir_path)
 
 
