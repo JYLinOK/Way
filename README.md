@@ -1,11 +1,10 @@
-# Way1.0.8 - An easy and fast front-end generator library
+# Way1.1.1 - An easy and fast front-end generator library
 ***
 
 ## Updation Note: 
 
-1. Handled the bug that if there is a None-Content file in wayrouter, the exception will occur.
+1. Add the bath generating tool WayBatch.py.
 
 
-
-Dec, 28, 2021
+Nov, 06, 2022
 (By Jinwei Lin:)
