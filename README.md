@@ -1,9 +1,10 @@
-# Way1.1.1 - An easy and fast front-end generator library
+# Way1.1.2 - An easy and fast front-end generator library
 ***
 
 ## Updation Note: 
 
-1. Add the bath generating tool WayBatch.py.
+1. Add the function of automatically rewrite the editable file like .js .css .py .txt .json .csv .xml .ts .c .go .c++ .java and so on.
+2. Add the function of automatically generate the static source files like .png .jpg .mp3 .mp4 .gif .ico .jpeg .wmv .pdf and so on.
 
 ## Use:
 0. If WayBatch.py, import [jtc](https://github.com/JYLinOK/jtc) from JYLinOK.
