@@ -1,4 +1,5 @@
 import os
+import os.path
 import time
 import shutil
 import webbrowser
@@ -143,7 +144,6 @@ def now_update_scander(a_dir, edit_path):
             now_dir_scanning = a_dir + '/' + item_name
 
             # if item_name is a dir name
-            extend_list = ['.html']
             if not if_is_file(now_dir_scanning)[0]:
                 build_dir_path = wayconfig['html_build_path'] + now_dir_scanning[len(edit_path):]
                 # print('not file: build_dir_path = ', build_dir_path,'\n')
@@ -155,12 +155,22 @@ def now_update_scander(a_dir, edit_path):
                 now_update_scander(now_dir_scanning, edit_path)
 
             # if item_name is a file name
-            elif not if_end_with_extend_list(item_name, extend_list):
+            elif not if_end_with_extend_list(item_name, wayconfig['way_write_file_formats']):
                 build_file_path = wayconfig['html_build_path'] + now_dir_scanning[len(edit_path):]
-                # print('is file: build_dir_path = ', build_file_path,'\n')
 
-                # rewrite and create other formats but html files  
-                copy_file(now_dir_scanning, build_file_path)
+                if if_end_with_extend_list(item_name, wayconfig['copy_file_formats']):
+                    # print('________________________________')
+                    if not os.path.exists(build_file_path):
+                        try:
+                            print(f'{now_dir_scanning = }')
+                            print(f'{build_file_path = }')
+                            shutil.copy(now_dir_scanning, build_file_path)
+                        except:
+                            print('copy err')
+                            pass
+                else:
+                    # rewrite and create other formats but html files  
+                    copy_file(now_dir_scanning, build_file_path)
 
 
 # Write file
@@ -556,9 +566,6 @@ def way_html(wayconfig):
 
 
 
-# =============================================================================
-# =============================================================================
-
 # Run the web browser
 def run_browser():
     # Get specified browser location 
@@ -580,6 +587,7 @@ def run_browser():
             run_browser()
         except IOError:
             wayconfig['auto_restart']()
+
 
 
 # Way monitor for file individual update

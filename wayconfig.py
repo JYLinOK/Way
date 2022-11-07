@@ -75,6 +75,7 @@ wayconfig =  {
     "auto_restart_seed": 1,
     "auto_generate_seed": 1,
     "auto_scaner_seed": 1,
+    "way_write_file_formats": ['.html'],
     "copy_file_formats": copy_file_formats,
 }
 
