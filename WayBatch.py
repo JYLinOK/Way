@@ -110,13 +110,13 @@ def batch_files_strs(segs_dict:dict, template_f_path:str, save_dir:str):
 
     segs_dict = {
         'f1.extension':{
-            'tag_id_1': 'str_content_1',
-            'tag_id_2': 'str_content_2',
+            'way_id_1': 'str_content_1',
+            'way_id_2': 'str_content_2',
             ...
         },
         'f2.extension':{
-            'tag_id_1': 'str_content_3',
-            'tag_id_2': 'str_content_4',
+            'way_id_1': 'str_content_3',
+            'way_id_2': 'str_content_4',
             ...
         },
         ...
@@ -140,13 +140,13 @@ def batch_files(segs_dict:dict, template_f_path:str, save_dir:str):
     
     segs_dict = {
         'f1.extension':{
-            'tag_id_1': 'file_path_1 or str_content_1',
-            'tag_id_2': 'file_path_2 or str_content_2',
+            'way_id_1': 'file_path_1 or str_content_1',
+            'way_id_2': 'file_path_2 or str_content_2',
             ...
         },
         'f2.extension':{
-            'tag_id_1': 'file_path_3 or str_content_3',
-            'tag_id_2': 'file_path_4 or str_content_4',
+            'way_id_1': 'file_path_3 or str_content_3',
+            'way_id_2': 'file_path_4 or str_content_4',
             ...
         },
         ...
