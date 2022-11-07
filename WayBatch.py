@@ -52,12 +52,12 @@ def get_rest_segs_list(segs_list:list, len_txt:int):
 
 
 # ________________________________________________________________________________________________________
-def insert_segs_in_file(segs_dict:dict, file_path:str):
+def insert_segs_in_file(segs_dict:dict, origin_f_path:str, new_f_path:str):
     """
-    Insert segments list items in a file that has way-tag, rewrite the original file
+    Insert segments list items in a file that has way-tag, rewrite the original file to make a new file
     """
     
-    txt = jtc.read_file(file_path)
+    txt = jtc.read_file(origin_f_path)
     f_segs_list = segs_list(txt)
     segs_l = []
     for it in f_segs_list:
@@ -91,16 +91,36 @@ def insert_segs_in_file(segs_dict:dict, file_path:str):
                 # print(f'\n{new_str = }')
                 min_start = seg[1][1]
         
-    jtc.write_file('./index_new.html', new_str)
-
-
-  
+    jtc.write_file(new_f_path, new_str)
 
 
 
+# ________________________________________________________________________________________________________
+def batch_files(segs_dict:dict, template_path:str, save_dir:str):
+    """
+    Generate batch files with special segs_dict one by one
+    """
+    jtc.if_path_not_exist_create(save_dir)
 
 
 
 
+
+
+
+dir_path = './gen_dir/'
+segs_dict = {
+    'f1':{
+        'a': 'a_a',
+        'abc123': 'abc123',
+    },
+    'f2':{
+        'a': 'a_a',
+        'abc123': 'abc123',
+    },
+}
+
+
+find_list = batch_files(segs_dict, dir_path)
 
 
