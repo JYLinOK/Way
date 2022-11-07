@@ -1,8 +1,8 @@
 MAIN_LICENSES/
 jtc/
 batchfiles/
-htmledit/
-htmlbuild/
-htmlway/
+# htmledit/
+# htmlbuild/
+# htmlway/
 wayrouter/
 *.pyc
