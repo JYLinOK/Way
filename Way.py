@@ -159,6 +159,22 @@ def copy_file(copy_path, paste_path):
             fw.write(fr.read())
 
 
+
+# ________________________________________________________________________________________________________
+def if_end_with_extend_list(file_name:str, extend_list:list):
+    """
+    Judge if a file name is end with the items in a extend_list or not
+    """
+    end_with = False
+    for extend in extend_list:
+        if file_name.endswith(extend):
+            end_with = True
+            break
+    return end_with
+    
+
+
+
 # Get now lists
 def now_update_scander(a_dir, edit_path):
     # Get files or directories list
@@ -179,6 +195,7 @@ def now_update_scander(a_dir, edit_path):
                 # print('if_is_file(now_dir_scanning)[0] = ', if_is_file(now_dir_scanning)[0], '\n')
 
                 # if item_name is a dir name
+                extend_list = ['.html']
                 if not if_is_file(now_dir_scanning)[0]:
                     build_dir_path = html_build_path + now_dir_scanning[len(edit_path):]
                     # print('not file: build_dir_path = ', build_dir_path,'\n')
@@ -190,7 +207,7 @@ def now_update_scander(a_dir, edit_path):
                     now_update_scander(now_dir_scanning, edit_path)
 
                 # if item_name is a file name
-                elif not item_name.endswith('.html'):
+                elif not if_end_with_extend_list(item_name, extend_list):
                     build_file_path = html_build_path + now_dir_scanning[len(edit_path):]
                     # print('is file: build_dir_path = ', build_file_path,'\n')
 
