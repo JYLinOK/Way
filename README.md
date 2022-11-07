@@ -11,7 +11,7 @@
 
 
 ## UI Show:
-![image](https://github.com/JYLinOK/Way/readme/way.png)
+![image](https://github.com/JYLinOK/Way/blob/main/readme/way.png)
 
 
 
