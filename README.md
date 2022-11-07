@@ -8,7 +8,15 @@
 ## Use:
 0. If WayBatch.py, import [jtc](https://github.com/JYLinOK/jtc) from JYLinOK.
 1. Run the Way.py to start the easy desgin with Way.
-2. RWayBatch to generate batch file with same template and different data. 
+2. Run WayBatch.py to generate batch file with same template and different data. 
+3. You can run run_waybatch.py to quickly run the WayBatch.
+
+
+## Note:
+1. If want to use WayBatch, git clone the jtc by following code:
+```git
+git clone https://github.com/JYLinOK/jtc.git
+```
 
 
 
