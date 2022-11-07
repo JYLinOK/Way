@@ -651,58 +651,6 @@ def way_html():
         except IOError:
             auto_restart()
 
-   
-
-
-
-# =============================================================================
-# Static Test :
-
-# way_html()
-
-# now_update_scander(html_edit_path, html_edit_path)
-
-# delete_extra_files()
-
-# a = get_way_content('home/wr1', 'wr', './index.html', html_way_path)
-# print('a = \n', a)
-
-
-# way_path = './wayrouter/home/wr1.html'
-# html_path = './htmledit/a/ydook.html'
-# a = get_wayrouted_content(way_path, html_path, way_router_path)
-# print('a = \n', a)
-
-
-# a = [1, 3, 5, 7, 9, 11, 13, 15]
-# b = [2, 4, 6, 8]
-# print(change_connect(a, b))
-
-
-# wr = './wayrouter/home/wr1.html'
-# text = read_files(wr)
-# a = get_sparate_set(text, '"./', '\"', 0)
-# print('a = \n', a)
-
-
-# inside_path = './a/a/a/ydook.html'
-# change_path = './about.html'
-# a = auto_change_link(inside_path, change_path)
-# print('a = \n', a)
-
-# auto_restart()
-
-
-# a = './tutorials/v1.0.8'
-# print(if_is_file(a))
-
-
-# while True:
-#     now_update_scander(html_edit_path, html_edit_path)
-#     delete_extra_files()
-#     time.sleep(1)
-#     # print('------>')
-#     way_html()
 
 
 # =============================================================================
@@ -770,7 +718,7 @@ def way_update_keyfiles(q):
         pass
         # print('Success!')
 
-    
+
 
 # ________________________________________________________________________________________________________
 def simple_run():
