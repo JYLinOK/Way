@@ -1,4 +1,7 @@
 MAIN_LICENSES/
 jtc/
-*.html
+htmledit/
+htmlbuild/
+htmlway/
+wayrouter/
 *.pyc
