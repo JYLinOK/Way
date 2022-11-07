@@ -162,17 +162,4 @@ def batch_files(segs_dict:dict, template_f_path:str, save_dir:str):
     batch_files_strs(segs_dict, template_f_path, save_dir)
 
 
-segs_dict = {
-    'f1.html':{
-        'a': './insert_files/123.txt',
-        'b': './insert_files/abc.html',
-    },
-    'f2.html':{
-        'a': './insert_files/123.txt',
-        'b': './insert_files/abc.html',
-    },
-}
-
-dir_path = './gen_dir/'
-batch_files(segs_dict, './index3.html', dir_path)
 
