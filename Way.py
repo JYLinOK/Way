@@ -211,8 +211,8 @@ def now_update_scander(a_dir, edit_path):
                     build_file_path = html_build_path + now_dir_scanning[len(edit_path):]
                     # print('is file: build_dir_path = ', build_file_path,'\n')
 
-                    if not os.path.exists(build_file_path):
-                        copy_file(now_dir_scanning, build_file_path)
+                    # rewrite and create other formats but html files  
+                    copy_file(now_dir_scanning, build_file_path)
 
 
 # Write file
