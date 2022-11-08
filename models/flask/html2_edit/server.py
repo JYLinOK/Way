@@ -21,11 +21,11 @@ def login():
    if request.method == 'POST':
       print(1)
       user = request.form['nm']
-      return redirect(url_for('success',name = user))
+      return redirect(url_for('success', name = user))
    else:
       print(2)
       user = request.args.get('nm')
-      return redirect(url_for('success',name = user))
+      return redirect(url_for('success', name = user))
 
 
 if __name__ == '__main__':
