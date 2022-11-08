@@ -74,8 +74,11 @@ def get_all_items(now_dir, dir_set, file_set):
     
 
 
-# Get now lists
+# ________________________________________________________________________________________________________
 def get_now_lists():
+    """
+    Get now lists of all_edit_path_item and all_way_path_item
+    """
     # Get files and paths lists between editing and building
     all_edit_path_item = get_all_items(wayconfig['html2_edit_dir'], [], [])
     all_way_path_item = get_all_items(wayconfig['html3_way_dir'], [], [])
@@ -85,14 +88,16 @@ def get_now_lists():
     now_way_list = []
 
     # Get the now_html_list
-    for i in all_edit_path_item[1]:
-        if i.endswith('.html'):
-            now_html_list.append(i)
+    if all_edit_path_item != None:
+        for i in all_edit_path_item[1]:
+            if i.endswith('.html'):
+                now_html_list.append(i)
 
     # Get the now_way_list
-    for i in all_way_path_item[1]:
-        if i.endswith('.html'):
-            now_way_list.append(i)
+    if all_way_path_item != None:
+        for i in all_way_path_item[1]:
+            if i.endswith('.html'):
+                now_way_list.append(i)
 
     return [now_html_list, now_way_list]
 
