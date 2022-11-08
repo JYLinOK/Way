@@ -79,7 +79,7 @@ wayconfig =  {
     "copy_file_formats": copy_file_formats,
     "models_dir":'./models/',
     "models":['normal', 'flask'],
-    "model_select": 0,
-    "new_project": True,
+    "model_select": 1,
+    "new_project": False,
 }
 
