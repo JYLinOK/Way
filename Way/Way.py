@@ -11,15 +11,10 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1])) 
 from wayconfig import wayconfig
 
+# import jtc
+import jtc.jtc as jtc
 
 
-# ============================================================================================================
-# Load the config
-home_index_html = os.getcwd() + '/' + wayconfig['home_index_html']
-
-# Get tag name list
-tag_name_list = os.listdir(wayconfig['html_way_path'])
-# ============================================================================================================
 
 
 
@@ -82,8 +77,8 @@ def get_all_items(now_dir, dir_set, file_set):
 # Get now lists
 def get_now_lists():
     # Get files and paths lists between editing and building
-    all_edit_path_item = get_all_items(wayconfig['html_edit_path'], [], [])
-    all_way_path_item = get_all_items(wayconfig['html_way_path'], [], [])
+    all_edit_path_item = get_all_items(wayconfig['html2_edit_dir'], [], [])
+    all_way_path_item = get_all_items(wayconfig['html3_way_dir'], [], [])
 
     # initialize lists
     now_html_list = []
@@ -148,7 +143,7 @@ def now_update_scander(a_dir, edit_path):
 
             # if item_name is a dir name
             if not if_is_file(now_dir_scanning)[0]:
-                build_dir_path = wayconfig['html_build_path'] + now_dir_scanning[len(edit_path):]
+                build_dir_path = wayconfig['html1_build_dir'] + now_dir_scanning[len(edit_path):]
                 # print('not file: build_dir_path = ', build_dir_path,'\n')
 
                 if not os.path.exists(build_dir_path):
@@ -159,7 +154,7 @@ def now_update_scander(a_dir, edit_path):
 
             # if item_name is a file name
             elif not if_end_with_extend_list(item_name, wayconfig['way_write_file_formats']):
-                build_file_path = wayconfig['html_build_path'] + now_dir_scanning[len(edit_path):]
+                build_file_path = wayconfig['html1_build_dir'] + now_dir_scanning[len(edit_path):]
 
                 if if_end_with_extend_list(item_name, wayconfig['copy_file_formats']):
                     # print('________________________________')
@@ -426,8 +421,8 @@ def get_way_content(way_name, way_class, html_path, wayconfig):
    
     # Handle the pure way 
     if way_class == 'id':
-        all_way_path_item = get_all_items(wayconfig['html_way_path'], [], [])
-        way_path = wayconfig['html_way_path'] + '/' + way_name + '.html'
+        all_way_path_item = get_all_items(wayconfig['html3_way_dir'], [], [])
+        way_path = wayconfig['html3_way_dir'] + '/' + way_name + '.html'
         flag_true_return = False
 
         for i_way in all_way_path_item[1]:
@@ -440,8 +435,8 @@ def get_way_content(way_name, way_class, html_path, wayconfig):
     
     # Handle the way router
     elif way_class == 'wr':
-        all_wayrouter_path = get_all_items(wayconfig['way_router_path'], [], [])
-        way_path = wayconfig['way_router_path'] + '/' + way_name + '.html'
+        all_wayrouter_path = get_all_items(wayconfig['html4_router_dir'], [], [])
+        way_path = wayconfig['html4_router_dir'] + '/' + way_name + '.html'
         flag_true_return = False
 
         for i_wr in all_wayrouter_path[1]:
@@ -508,13 +503,13 @@ def get_list_str_in_all_wayrouter(list_name):
 # Delete the extra files in building folder
 def delete_extra_files():
     # Get files and paths lists between editing and building
-    all_edit_path_item = get_all_items(wayconfig['html_edit_path'], [], [])
-    all_build_path_item = get_all_items(wayconfig['html_build_path'], [], [])
-    len_build = len(wayconfig['html_build_path'])
+    all_edit_path_item = get_all_items(wayconfig['html2_edit_dir'], [], [])
+    all_build_path_item = get_all_items(wayconfig['html1_build_dir'], [], [])
+    len_build = len(wayconfig['html1_build_dir'])
 
     # delete excess files
     for f_built_file in all_build_path_item[1]:
-        f_built_2_edit = wayconfig['html_edit_path'] + f_built_file[len_build:]
+        f_built_2_edit = wayconfig['html2_edit_dir'] + f_built_file[len_build:]
 
         if f_built_2_edit not in all_edit_path_item[1]:
             if Path(f_built_file).is_file():
@@ -530,7 +525,7 @@ def delete_extra_files():
         
     # delete excess dirs
     for f_built_dir in all_build_path_item[0]:
-        f_built_2_edit = wayconfig['html_edit_path'] + f_built_dir[len_build:]
+        f_built_2_edit = wayconfig['html2_edit_dir'] + f_built_dir[len_build:]
         if f_built_2_edit not in all_edit_path_item[0]:
             if Path(f_built_dir).is_dir():
                 try:
@@ -549,11 +544,11 @@ def delete_extra_files():
 # Define way to handle html file
 def way_html(wayconfig):
     now_html_list = get_now_lists()[0]
-    edit_path_len = len(wayconfig['html_edit_path'])
+    edit_path_len = len(wayconfig['html2_edit_dir'])
 
     try:
         for html_path in now_html_list:
-            html_path_to_build = wayconfig['html_build_path'] + html_path[edit_path_len:]
+            html_path_to_build = wayconfig['html1_build_dir'] + html_path[edit_path_len:]
 
             way_tag_set = get_way_tags_set(html_path)
             html_add_way_segments = get_html_add_segments(html_path, way_tag_set, wayconfig)
@@ -572,7 +567,7 @@ def way_html(wayconfig):
 # Run the web browser
 def run_browser():
     # Get specified browser location 
-    index_url = home_index_html
+    index_url = os.getcwd() + '/' + wayconfig['home_index_html']
     browser_path = wayconfig['browser_exe_path']
 
     try:
@@ -597,7 +592,7 @@ def run_browser():
 def way_update_structure(q):
     try:
         while True:
-            now_update_scander(wayconfig['html_edit_path'], wayconfig['html_edit_path'])
+            now_update_scander(wayconfig['html2_edit_dir'], wayconfig['html2_edit_dir'])
             delete_extra_files()
             q.put('structure')
             time.sleep(wayconfig['auto_scaner_seed'])
@@ -624,14 +619,41 @@ def way_update_keyfiles(q, wayconfig):
         pass
 
 
+# ________________________________________________________________________________________________________
+def generate_model(wayconfig:dict):
+    model = wayconfig['models'][wayconfig['model_select']]
+    model_dir =  wayconfig['models_dir']
+
+    if wayconfig['new_project'] == True:
+        for dir in [
+            wayconfig['html1_build_dir'],
+            wayconfig['html2_edit_dir'],
+            wayconfig['html3_way_dir'],
+            wayconfig['html4_router_dir']
+            ]:
+            if os.path.exists(dir):
+                jtc.clear_dir(dir)
+
+        current_path = os.path.dirname(os.path.abspath(__file__)) 
+        # print(f'{current_path = }')
+
+        for it in os.listdir(model_dir+'/'+model):
+            source = model_dir+model+'/'+it 
+            target = current_path + '/../' +it
+            shutil.copytree(source, target)
+
+
 
 # ________________________________________________________________________________________________________
-def simple_run(wayconfig):
+def simple_run(wayconfig:dict):
     """
     Quickly run the Way
     """
     # Show welcom
     welcome_show()
+
+    # Auto generate the default model project
+    generate_model(wayconfig)
 
     # Set Queue
     q = Queue()
