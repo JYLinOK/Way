@@ -80,6 +80,6 @@ wayconfig =  {
     "models":['normal', 'flask'],
     "home_index_html": ["./html1_build/index.html", "./html1_build/templates/index.html"],
     "model_select": 1,
-    "new_project": False,
+    "new_project": True,
 }
 
