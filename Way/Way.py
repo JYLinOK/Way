@@ -174,12 +174,15 @@ def now_update_scander(a_dir:str, edit_path:str):
 
 
 
-
-# Write file
-def write_files(file_path, file_str):
+# ________________________________________________________________________________________________________
+def write_files(file_path:str, file_str:str):
+    """
+    Write file with str by try double 
+    """
     try:
-        with open(file_path, 'w', encoding='UTF-8') as fw:
-            fw.write(file_str)
+        if file_str != None:
+            with open(file_path, 'w', encoding='UTF-8') as fw:
+                fw.write(file_str)
     except IOError:
         print('IOError: write_files error!')
         try:
