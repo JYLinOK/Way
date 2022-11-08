@@ -621,6 +621,9 @@ def way_update_keyfiles(q, wayconfig):
 
 # ________________________________________________________________________________________________________
 def generate_model(wayconfig:dict):
+    """
+    Generate the model project template files and folders at new start
+    """
     model = wayconfig['models'][wayconfig['model_select']]
     model_dir =  wayconfig['models_dir']
 
