@@ -163,8 +163,8 @@ def now_update_scander(edit_path):
                     # print('________________________________')
                     if not os.path.exists(build_file_path):
                         try:
-                            print(f'{now_dir_scanning = }')
-                            print(f'{build_file_path = }')
+                            # print(f'{now_dir_scanning = }')
+                            # print(f'{build_file_path = }')
                             shutil.copy(now_dir_scanning, build_file_path)
                         except:
                             print('copy err')
