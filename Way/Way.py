@@ -131,18 +131,17 @@ def if_end_with_extend_list(file_name:str, extend_list:list):
 
 
 # ________________________________________________________________________________________________________
-def now_update_scander(edit_path):
+def now_update_scander(a_dir:str, edit_path:str):
     """
     Update and copy the files and folders structure from edit folder to build folder
     """
-     # Get files or directories list
-    now_dir_scanning = edit_path
+    now_dir_scanning = a_dir
     files_list = os.listdir(now_dir_scanning)
 
     # Scaner the files or directories
     if files_list != []:
         for item_name in files_list:
-            now_dir_scanning = edit_path + '/' + item_name
+            now_dir_scanning = a_dir + '/' + item_name
 
             # if item_name is a dir name
             if not if_is_file(now_dir_scanning)[0]:
@@ -153,7 +152,7 @@ def now_update_scander(edit_path):
                     os.makedirs(build_dir_path)
 
                 # update iteration
-                now_update_scander(now_dir_scanning)
+                now_update_scander(now_dir_scanning, edit_path)
 
             # if item_name is a file name
             elif not if_end_with_extend_list(item_name, wayconfig['way_write_file_formats']):
@@ -163,8 +162,8 @@ def now_update_scander(edit_path):
                     # print('________________________________')
                     if not os.path.exists(build_file_path):
                         try:
-                            # print(f'{now_dir_scanning = }')
-                            # print(f'{build_file_path = }')
+                            print(f'{now_dir_scanning = }')
+                            print(f'{build_file_path = }')
                             shutil.copy(now_dir_scanning, build_file_path)
                         except:
                             print('copy err')
@@ -172,6 +171,7 @@ def now_update_scander(edit_path):
                 else:
                     # rewrite and create other formats but html files  
                     copy_file(now_dir_scanning, build_file_path)
+
 
 
 
@@ -599,7 +599,7 @@ def run_browser():
 def way_update_structure(q):
     try:
         while True:
-            now_update_scander(wayconfig['html2_edit_dir'])
+            now_update_scander(wayconfig['html2_edit_dir'], wayconfig['html2_edit_dir'])
             delete_extra_files()
             q.put('structure')
             time.sleep(wayconfig['auto_scaner_seed'])
