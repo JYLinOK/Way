@@ -564,10 +564,13 @@ def way_html(wayconfig):
 
 
 
-# Run the web browser
+# ________________________________________________________________________________________________________
 def run_browser():
+    """
+    Run the web browser when start
+    """
     # Get specified browser location 
-    index_url = os.getcwd() + '/' + wayconfig['home_index_html']
+    index_url = os.getcwd() + '/' + wayconfig['home_index_html'][wayconfig['model_select']]
     browser_path = wayconfig['browser_exe_path']
 
     try:

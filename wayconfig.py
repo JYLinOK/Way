@@ -69,7 +69,6 @@ wayconfig =  {
     "welcome_context": True,
     "welcome_got": False,
     "welcome_path": "./welcome.txt",
-    "home_index_html": "./html1_build/index.html",
     "way_announce_str": "<script>console.log('\\\A/ Hi, Way! - An easy and fast front-end generator framework.');</script>",
     "browser_exe_path": "C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chrome.exe",
     "auto_restart_seed": 1,
@@ -79,6 +78,7 @@ wayconfig =  {
     "copy_file_formats": copy_file_formats,
     "models_dir":'./models/',
     "models":['normal', 'flask'],
+    "home_index_html": ["./html1_build/index.html", "./html1_build/templates/index.html"],
     "model_select": 1,
     "new_project": False,
 }
