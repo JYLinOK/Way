@@ -158,8 +158,13 @@ def batch_files(segs_dict:dict, template_f_path:str, save_dir:str):
 
     for it_exten in segs_dict:
         for tag_id in segs_dict[it_exten]:
-            if jtc.if_path_or_file_exist(segs_dict[it_exten][tag_id]):
-                segs_dict[it_exten][tag_id] = jtc.read_file(segs_dict[it_exten][tag_id])
+            afile = segs_dict[it_exten][tag_id]
+            if jtc.if_path_or_file_exist(afile):
+                print(f'exist file: {afile = }')
+                segs_dict[it_exten][tag_id] = jtc.read_file(afile)
+            else:
+                print('No exist file =============>> Str', )
+                segs_dict[it_exten][tag_id] = afile
 
     # print(f'{segs_dict = }')
     batch_files_strs(segs_dict, template_f_path, save_dir)
